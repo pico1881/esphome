@@ -1,6 +1,6 @@
 #include "innova.h"
 #include "esphome/core/log.h"
-#include "innova_register.h"
+#include "const.h"
 
 namespace esphome {
 namespace innova {
