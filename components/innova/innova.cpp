@@ -11,7 +11,7 @@ static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_WATER_TEMPERA
 
 void INNOVA::on_modbus_data(const std::vector<uint8_t> &data) {
    auto get_16bit = [&](size_t i) -> uint16_t {
-     uint16_t temp = encode_uint16(data[i], data[i + 1]);
+     uint16_t temp = encode_uint16(data[i *2], data[i * 2 + 1]);
      return temp;
    };
 
