@@ -24,6 +24,7 @@ class Innova : public climate::Climate, public modbus::ModbusDevice, public Poll
     traits.set_visual_temperature_step(0.5);
     return traits;
   }
+  void set_unit_of_measurement(const char *unit);
 
   void control(const climate::ClimateCall &call) override {
     if (call.get_mode().has_value()) {
