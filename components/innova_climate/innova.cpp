@@ -70,5 +70,3 @@ void Innova::update() {
 
 }  // namespace innova
 }  // namespace esphome
-
-#endif
