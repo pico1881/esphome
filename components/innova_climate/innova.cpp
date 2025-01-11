@@ -64,8 +64,8 @@ void Innova::update() {
     if (status) {
       ESP_LOGW(TAG, "[%s] esp_ble_gattc_write_char failed, status=%d", this->parent_->address_str().c_str(), status);
     }
-    this->current_request_++; */
-  }
+    this->current_request_++; 
+  }*/
 }
 
 }  // namespace innova
