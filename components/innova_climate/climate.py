@@ -10,7 +10,7 @@ UNITS = {
 
 innova_ns = cg.esphome_ns.namespace("innova")
 Innova = innova_ns.class_(
-    "Innova", climate.Climate, public modbus::ModbusDevice, cg.PollingComponent
+    "Innova", climate.Climate, cg.PollingComponent
 )
 
 CONFIG_SCHEMA = (
@@ -20,7 +20,6 @@ CONFIG_SCHEMA = (
             cv.Required(CONF_UNIT_OF_MEASUREMENT): cv.enum(UNITS),
         }
     )
-    .extend(ble_client.BLE_CLIENT_SCHEMA)
     .extend(cv.polling_component_schema("60s"))
 )
 
