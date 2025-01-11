@@ -10,7 +10,7 @@ UNITS = {
 
 innova_ns = cg.esphome_ns.namespace("innova")
 Innova = innova_ns.class_(
-    "Innova", climate.Climate, ble_client.BLEClientNode, cg.PollingComponent
+    "Innova", climate.Climate, public modbus::ModbusDevice, cg.PollingComponent
 )
 
 CONFIG_SCHEMA = (
