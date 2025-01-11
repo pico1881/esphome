@@ -10,11 +10,14 @@ static const char *const TAG = "innova";
 static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_WATER_TEMPERATURE, INNOVA_FAN_SPEED, INNOVA_PROGRAM, INNOVA_SEASON, INNOVA_SETPOINT};
 
 void INNOVA::on_modbus_data(const std::vector<uint8_t> &data) {
-   auto get_16bit = [&](size_t i) -> uint16_t {
-     uint16_t temp = encode_uint16(data[i *2], data[i * 2 + 1]);
-     return temp;
-   };
+ //  auto get_16bit = [&](size_t i) -> uint16_t {
+//     uint16_t temp = encode_uint16(data[i *2], data[i * 2 + 1]);
+//     return temp;
+//   };
 
+   auto get_16bit = [&](size_t i) -> uint16_t { 
+      return encode_uint16(data[i *2], data[i * 2 + 1]);
+   };
   
   this->waiting_ = false;
 //  ESP_LOGV(TAG, "Data: %s", hexencode(data).c_str());   
