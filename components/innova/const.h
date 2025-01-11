@@ -4,7 +4,7 @@ namespace esphome {
 namespace innova {
 
 static const uint16_t INNOVA_AIR_TEMPERATURE = 0x00;
-static const uint16_t INNOVA_WATER_TEMPERATURE = 0x02;
+static const uint16_t INNOVA_WATER_TEMPERATURE = 0x01;
 static const uint16_t INNOVA_REAL_SETPOINT = 0x08;
 static const uint16_t INNOVA_FAN_SPEED = 0x0F;
 static const uint16_t INNOVA_OUTPUT_RELAY = 0x09;
