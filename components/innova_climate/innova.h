@@ -11,20 +11,9 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
  public:
   Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
-  void setup() override {
-    // This will be called by App.setup()
-    // Initialize sensors, relays, etc.
-  }
+  void setup() override;
   void dump_config() override;
-  void update() override {
-    // This will be called every "update_interval" milliseconds.
-    // Poll the sensor and update the climate state.
-  //  float temperature = read_temperature();
-   // float humidity = read_humidity();
-
-    // Publish updated values
- //   this->publish_state();
-  }
+  void update() override;
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
