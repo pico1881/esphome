@@ -13,7 +13,7 @@ innova_ns = cg.esphome_ns.namespace("innova")
 InnovaClimate = innova_ns.class_("InnovaClimate", climate.Climate, cg.PollingComponent)
 
 CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(<innovaClimate),
+    cv.GenerateID(): cv.declare_id(InnovaClimate),
     cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
     cv.Optional(CONF_HUMIDITY): sensor.sensor_schema(),
 }).extend(cv.polling_component_schema('60s')).extend(climate.CLIMATE_SCHEMA)
