@@ -11,14 +11,8 @@ using namespace esphome::climate;
 void Innova::dump_config() { LOG_CLIMATE("", "Innova BLE Cooker", this); }
 
 void Innova::update() {
-    // This will be called every "update_interval" milliseconds.
-    // Implement your climate control logic here.
+    this->current_temperature = 20.0;
 
-    // Example: Read temperature from a sensor
-    float current_temperature = read_temperature();
-    
-    // Update the climate state
-    this->current_temperature_ = current_temperature;
     publish_state();
 }
 
