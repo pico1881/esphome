@@ -30,6 +30,4 @@ async def to_code(config):
     await cg.register_component(var, config)
     await climate.register_climate(var, config)
 
-)
-
 
