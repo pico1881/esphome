@@ -25,7 +25,16 @@ class Innova : public climate::Climate, public PollingComponent {
     traits.set_visual_temperature_step(0.5);
     return traits;
   }
+protected:
+  float read_temperature() {
+    // Read temperature from sensor
+    return 25.0;  // Dummy value for example
+  }
 
+  float read_humidity() {
+    // Read humidity from sensor
+    return 50.0;  // Dummy value for example
+  }
 };
 
 }  // namespace innova
