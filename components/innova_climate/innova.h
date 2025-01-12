@@ -25,6 +25,8 @@ class Innova : public climate::Climate, public PollingComponent {
     return traits;
   }
 protected:
+void control(const climate::ClimateCall &call) override;
+
   float read_temperature() {
     // Read temperature from sensor
     return 25.0;  // Dummy value for example
