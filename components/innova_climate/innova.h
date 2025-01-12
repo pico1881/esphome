@@ -7,9 +7,9 @@
 namespace esphome {
 namespace innova {
 
-class InnovaClimate : public esphome::climate::Climate, public PollingComponent {
+class Innova : public esphome::climate::Climate, public PollingComponent {
  public:
-  InnovaClimate() : PollingComponent(15000) {}  // Poll every 15 seconds
+  Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
   void setup() override {
     // This will be called by App.setup()
