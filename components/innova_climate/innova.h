@@ -26,6 +26,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
     auto traits = climate::ClimateTraits();
+    traits.set_supports_action(true);
     traits.set_supports_current_temperature(true);
     traits.set_supported_modes({
            climate::CLIMATE_MODE_OFF, 
