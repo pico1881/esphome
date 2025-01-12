@@ -19,11 +19,11 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
   void update() override {
     // This will be called every "update_interval" milliseconds.
     // Poll the sensor and update the climate state.
-    float temperature = read_temperature();
-    float humidity = read_humidity();
+  //  float temperature = read_temperature();
+   // float humidity = read_humidity();
 
     // Publish updated values
-    this->publish_state();
+ //   this->publish_state();
   }
 
   climate::ClimateTraits traits() override {
