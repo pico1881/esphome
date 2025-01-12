@@ -40,4 +40,3 @@ async def to_code(config):
     await cg.register_component(var, config)
     await climate.register_climate(var, config)
 
-ar.set_unit_of_measurement(config[CONF_UNIT_OF_MEASUREMENT]))
