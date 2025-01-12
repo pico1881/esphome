@@ -18,7 +18,7 @@ void Innova::update() {
     float current_temperature = read_temperature();
     
     // Update the climate state
-    current_temperature_ = current_temperature;
+    this->current_temperature_ = current_temperature;
     publish_state();
 }
 
