@@ -15,7 +15,7 @@ void Innova::update() {
     // Implement your climate control logic here.
 
     // Example: Read temperature from a sensor
-    float current_temperature = float read_temperature();
+    float current_temperature = read_temperature();
     
     // Update the climate state
     current_temperature_ = current_temperature;
