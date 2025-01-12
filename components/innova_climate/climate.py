@@ -23,7 +23,7 @@ InnovaClimate = innova_ns.class_("InnovaClimate", climate.Climate, cg.PollingCom
 CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA(
         {
-            cv.GenerateID(): cv.declare_id(Innova),
+            cv.GenerateID(): cv.declare_id(InnovaClimate),
         }
     )
     .extend(cv.polling_component_schema("60s"))
