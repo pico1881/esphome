@@ -44,4 +44,3 @@ class Innova : public climate::Climate, public modbus::ModbusDevice, public Poll
 }  // namespace innova
 }  // namespace esphome
 
-#endif
