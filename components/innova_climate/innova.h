@@ -17,6 +17,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
   void update() override{
    this->current_temperature = 20.0;
    this->target_temperature = 21.0;
+   this->mode = climate::CLIMATE_MODE_HEAT;
    this->action = climate::CLIMATE_ACTION_HEATING;
    this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
    this->publish_state();
