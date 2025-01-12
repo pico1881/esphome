@@ -1,14 +1,13 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "esphome/components/modbus/modbus.h"
 #include "esphome/components/climate/climate.h"
 
 namespace esphome {
 namespace innova {
 
 
-class Innova : public climate::Climate, public modbus::ModbusDevice, public PollingComponent {
+class Innova : public climate::Climate, public PollingComponent {
  public:
   void setup() override;
   void loop() override;
