@@ -14,7 +14,10 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
   void setup() override{}
 
   void dump_config() override{}
-  void update() override{}
+  void update() override{
+   this->current_temperature = 20.0;
+   this->publish_state();
+  }
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
