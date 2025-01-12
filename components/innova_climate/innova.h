@@ -13,6 +13,8 @@ class Innova : public climate::Climate, public PollingComponent {
   void loop() override;
   void update() override;
   void dump_config() override;
+  float read_temperature() override;
+  float read_humidity() override;
 
   climate::ClimateTraits traits() override {
     auto traits = climate::ClimateTraits();
