@@ -4,8 +4,6 @@ from esphome.components import climate
 
 from esphome.const import (
     CONF_ID, 
-    CONF_TEMPERATURE, 
-    CONF_HUMIDITY
 )
 
 innova_ns = cg.esphome_ns.namespace("innova")
