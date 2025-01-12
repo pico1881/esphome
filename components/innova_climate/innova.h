@@ -30,10 +30,10 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
     // Return the traits of this climate device.
     auto traits = climate::ClimateTraits();
     traits.set_supports_current_temperature(true);
-    traits.set_supports_auto_mode(true);
-    traits.set_supports_cool_mode(true);
-    traits.set_supports_heat_mode(true);
-    traits.set_supports_fan_only_mode(true);
+    traits.set_supported_modes({climate::CLIMATE_MODE_OFF, climate::ClimateMode::CLIMATE_MODE_HEAT});
+    traits.set_visual_min_temperature(16.0);
+    traits.set_visual_max_temperature(28.0);
+    traits.set_visual_temperature_step(0.5);
     return traits;
   }
 
