@@ -21,7 +21,7 @@ Innova = innova_ns.class_("Innova", climate.Climate, cg.PollingComponent)
 
 
 CONFIG_SCHEMA = (
-    climate.CLIMATE_SCHEMA(
+    climate.CLIMATE_SCHEMA.extend(
         {
             cv.GenerateID(): cv.declare_id(Innova),
         }
