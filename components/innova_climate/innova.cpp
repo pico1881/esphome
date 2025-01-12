@@ -20,15 +20,6 @@ static const char *const TAG = "innova";
     this->publish_state();
   }
 
-  float read_temperature() {
-    // Read temperature from sensor
-    return 25.0;  // Dummy value for example
-  }
-
-  float read_humidity() {
-    // Read humidity from sensor
-    return 50.0;  // Dummy value for example
-  }
 
 }  // namespace innova
 }  // namespace esphome
