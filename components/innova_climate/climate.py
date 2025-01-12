@@ -29,6 +29,9 @@ CONFIG_SCHEMA = (
 async def to_code(config):
     # Create an instance of the CustomClimate component
     var = cg.new_Pvariable(config[CONF_ID])
+    # Set up the custom climate component
+    await cg.register_component(var, config)
+    await climate.register_climate(var, config)
     
     if CONF_TEMPERATURE in config:
         conf = config[CONF_TEMPERATURE]
@@ -41,7 +44,5 @@ async def to_code(config):
         cg.add(var.set_humidity_sensor(sens))
         
 
-    # Set up the custom climate component
-    await cg.register_component(var, config)
-    await climate.register_climate(var, config)
+
 
