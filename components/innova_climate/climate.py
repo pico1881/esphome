@@ -11,14 +11,10 @@ Innova = innova_ns.class_(
     "Innova", climate.Climate, cg.PollingComponent
 )
 
-CONFIG_SCHEMA = (
-    climate.CLIMATE_SCHEMA.extend(
-        {
-            cv.GenerateID(): cv.declare_id(Innova),
-        }
-    )
-    .extend(cv.polling_component_schema("60s"))
-)
+CONFIG_SCHEMA = cv.Schema({
+    cv.GenerateID(): cv.declare_id(Innova),
+}).extend(cv.polling_component_schema('60s')).extend(climate.CLIMATE_SCHEMA)
+
 
         
 async def to_code(config):
