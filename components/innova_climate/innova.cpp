@@ -1,23 +1,14 @@
 #include "innova.h"
 #include "esphome/core/log.h"
-#include "esphome/components/climate/climate.h"
-
 
 namespace esphome {
 namespace innova {
 
 static const char *const TAG = "innova";
 
-  void Innova::dump_config() { LOG_CLIMATE("", "Innova climate", this); }
-
-  void Innova::setup() {
-    
+  void Innova::dump_config() { 
+    LOG_CLIMATE("", "Innova climate", this); 
   }
-
-  void Innova::loop() {
-    
-  }
- 
 
   void Innova::update() {
     // This will be called every "update_interval" milliseconds.
