@@ -24,21 +24,9 @@ class Innova : public climate::Climate, public modbus::ModbusDevice, public Poll
     traits.set_visual_temperature_step(0.5);
     return traits;
   }
-  void set_unit_of_measurement(const char *unit);
 
-  void control(const climate::ClimateCall &call) override {
-    if (call.get_mode().has_value()) {
-      // User requested mode change
-      this->mode = *call.get_mode();
-    }
-    if (call.get_target_temperature().has_value()) {
-      // User requested target temperature change
-      this->target_temperature = *call.get_target_temperature();
-    }
-    // Apply changes to your hardware here
-    this->publish_state();
-  }
-
+ protected:
+  void control(const climate::ClimateCall &call) override;
 };
 
 }  // namespace innova
