@@ -15,7 +15,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
     // This will be called by App.setup()
     // Initialize sensors, relays, etc.
   }
-
+  void dump_config() override;
   void update() override {
     // This will be called every "update_interval" milliseconds.
     // Poll the sensor and update the climate state.
