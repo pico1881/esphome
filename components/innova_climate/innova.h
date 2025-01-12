@@ -11,10 +11,10 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
  public:
   Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
-  void setup() override;
+  void setup() override{}
 
-  void dump_config() override;
-  void update() override;
+  void dump_config() override{}
+  void update() override{}
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
