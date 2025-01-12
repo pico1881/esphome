@@ -17,7 +17,7 @@ CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA.extend(
         {
             cv.GenerateID(): cv.declare_id(Innova),
-            cv.Required(CONF_UNIT_OF_MEASUREMENT): cv.enum(UNITS),
+            cv.Optional(CONF_UNIT_OF_MEASUREMENT): cv.enum(UNITS),
         }
     )
     .extend(cv.polling_component_schema("60s"))
