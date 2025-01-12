@@ -10,10 +10,6 @@ using namespace esphome::climate;
 
 void Innova::dump_config() { LOG_CLIMATE("", "Innova BLE Cooker", this); }
 
-void Innova::setup() {}
-
-void Innova::loop() {}
-
 void Innova::update() {
     // This will be called every "update_interval" milliseconds.
     // Implement your climate control logic here.
