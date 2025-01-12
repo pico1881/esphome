@@ -10,7 +10,7 @@ from esphome.const import (
 
 innova_ns = cg.esphome_ns.namespace("innova")
 
-InnovaClimate = innova_ns.class_("InnovaClimate", climate.Climate, cg.PollingComponent)
+Innova = innova_ns.class_("Innova", climate.Climate, cg.PollingComponent)
 
 
 #CONFIG_SCHEMA = cv.Schema({
@@ -23,7 +23,7 @@ InnovaClimate = innova_ns.class_("InnovaClimate", climate.Climate, cg.PollingCom
 CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA(
         {
-            cv.GenerateID(): cv.declare_id(InnovaClimate),
+            cv.GenerateID(): cv.declare_id(Innova),
         }
     )
     .extend(cv.polling_component_schema("60s"))
