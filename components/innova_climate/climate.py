@@ -24,7 +24,6 @@ CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA.extend(
         {
             cv.GenerateID(): cv.declare_id(Innova),
-            cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
         }
     )
     .extend(cv.polling_component_schema("60s"))
@@ -36,9 +35,9 @@ async def to_code(config):
     await climate.register_climate(var, config)
     
     # Set up temperature sensor if defined
-    if CONF_TEMPERATURE in config:
-        sens = await sensor.new_sensor(config[CONF_TEMPERATURE])
-        cg.add(var.set_temperature_sensor(sens))
+#    if CONF_TEMPERATURE in config:
+#        sens = await sensor.new_sensor(config[CONF_TEMPERATURE])
+#        cg.add(var.set_temperature_sensor(sens))
 
     # Set up humidity sensor if defined
 #    if CONF_HUMIDITY in config:
