@@ -18,31 +18,18 @@ CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(Innova),
-            cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
-            cv.Optional(CONF_HUMIDITY): sensor.sensor_schema(),
+
         }
     )
     .extend(cv.polling_component_schema('60s'))
     .extend(climate.CLIMATE_SCHEMA)
 )
-
+        
 async def to_code(config):
-    # Create an instance of the CustomClimate component
     var = cg.new_Pvariable(config[CONF_ID])
-    # Set up the custom climate component
     await cg.register_component(var, config)
     await climate.register_climate(var, config)
-    
-    if CONF_TEMPERATURE in config:
-        conf = config[CONF_TEMPERATURE]
-        sens = await sensor.new_sensor(conf)
-        cg.add(var.set_temperature_sensor(sens))
 
-    if CONF_HUMIDITY in config:
-        conf = config[CONF_HUMIDITY]
-        sens = await sensor.new_sensor(conf)
-        cg.add(var.set_humidity_sensor(sens))
-        
-
+)
 
 
