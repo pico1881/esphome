@@ -1,5 +1,6 @@
 #include "innova.h"
 #include "esphome/core/log.h"
+#include "esphome/components/climate/climate.h"
 
 
 namespace esphome {
@@ -18,7 +19,7 @@ static const char *const TAG = "innova";
   }
  
 
-  void Innova::update() override {
+  void Innova::update() {
     // This will be called every "update_interval" milliseconds.
     // Poll the sensor and update the climate state.
     float temperature = read_temperature();
