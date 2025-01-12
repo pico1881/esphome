@@ -14,12 +14,17 @@ Innova = innova_ns.class_(
 )
 
 
-CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(Innova),
-    cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
-    cv.Optional(CONF_HUMIDITY): sensor.sensor_schema(),
-}).extend(cv.polling_component_schema('60s')).extend(climate.CLIMATE_SCHEMA)
-
+CONFIG_SCHEMA = (
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.declare_id(Innova),
+            cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
+            cv.Optional(CONF_HUMIDITY): sensor.sensor_schema(),
+        }
+    )
+    .extend(cv.polling_component_schema('60s'))
+    .extend(climate.CLIMATE_SCHEMA)
+)
 
 async def to_code(config):
     # Create an instance of the CustomClimate component
