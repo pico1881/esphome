@@ -7,14 +7,7 @@ namespace innova {
 static const char *const TAG = "innova";
 static const uint8_t CMD_READ_REG = 0x03;
 
-void Innova::dump_config() { 
-  LOG_CLIMATE("", "Innova Climate", this); 
-  ESP_LOGCONFIG(TAG, "INNOVA:");
-  ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
-}
-
 void Innova::setup() {
-   //send(CMD_READ_REG, 0, 2);
    this->current_temperature = 20.0;
    this->target_temperature = 21.0;
    this->mode = climate::CLIMATE_MODE_HEAT;
@@ -47,6 +40,13 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 
 void Innova::update() {
    this->current_temperature = this->current_temp_;
+   this->publish_state();
+}
+
+void Innova::dump_config() { 
+  LOG_CLIMATE("", "Innova Climate", this); 
+  ESP_LOGCONFIG(TAG, "INNOVA:");
+  ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
 }
 
 }  // namespace innova
