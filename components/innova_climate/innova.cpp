@@ -46,7 +46,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
  }
 
 void Innova::update() {
-
+   this->current_temperature = this->current_temp_;
 }
 
 }  // namespace innova
