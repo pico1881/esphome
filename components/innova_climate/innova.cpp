@@ -25,20 +25,21 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 }
 
  void Innova::loop() {
-   uint32_t now = millis();
+//   uint32_t now = millis();
    // timeout after 15 seconds
-   if (this->waiting_ && (now - this->last_send_ > 15000)) {
-     ESP_LOGW(TAG, "timed out waiting for response");
-     this->waiting_ = false;
-   }
-   if (this->waiting_ )
-     return;
-   this->last_send_ = now;
-   send(CMD_READ_REG, 0, 2);
-   this->waiting_ = true;
+//   if (this->waiting_ && (now - this->last_send_ > 15000)) {
+//     ESP_LOGW(TAG, "timed out waiting for response");
+//     this->waiting_ = false;
+//   }
+//   if (this->waiting_ )
+//     return;
+//   this->last_send_ = now;
+//   send(CMD_READ_REG, 0, 2);
+//   this->waiting_ = true;
  }
 
 void Innova::update() {
+   send(CMD_READ_REG, 0, 2);
    this->current_temperature = this->current_temp_;
    this->publish_state();
 }
