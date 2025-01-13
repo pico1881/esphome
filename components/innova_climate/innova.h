@@ -49,7 +49,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   uint32_t last_send_{0};
   float current_temp_{10.0};
 
-  void control(const climate::ClimateCall &call) override {
+  void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
     if (call.get_mode().has_value()) {
       // User requested mode change
@@ -63,10 +63,10 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     // Apply the changes (e.g., turn on/off relays)
     apply_control();
     this->publish_state();
-  }
+  }*/
 
 
-  void apply_control() {
+ /*  void apply_control() {
     // Implement logic to control the HVAC system based on the current mode and target temperature
     if (this->mode == climate::CLIMATE_MODE_COOL) {
       // Turn on cooling
@@ -75,7 +75,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     } else {
       // Turn off HVAC
     }
-  }
+  }*/
 };
 
 }  // namespace innova
