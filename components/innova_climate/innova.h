@@ -31,7 +31,8 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     });
     traits.set_visual_min_temperature(16.0);
     traits.set_visual_max_temperature(28.0);
-    traits.set_visual_temperature_step(0.5);
+    traits.set_visual_target_temperature_step(0.5);
+    traits.visual_current_temperature_step(0.1);
     traits.set_supported_fan_modes({
             climate::CLIMATE_FAN_AUTO,
             climate::CLIMATE_FAN_LOW,
