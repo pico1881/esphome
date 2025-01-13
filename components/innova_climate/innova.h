@@ -40,6 +40,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     });
     return traits;
   }
+float current_temp_;
 
  protected:
   void control(const climate::ClimateCall &call) override {
