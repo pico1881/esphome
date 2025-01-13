@@ -16,8 +16,12 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   ESP_LOGD(TAG, "Air=%.1f", value);
 }
 
-void Innova::update() {
+ void Innova::loop() {
    send(CMD_READ_REG, 0, 2);
+ }
+
+void Innova::update() {
+   //send(CMD_READ_REG, 0, 2);
    this->current_temperature = this->current_temp_;
    this->target_temperature = 21.0;
    this->mode = climate::CLIMATE_MODE_HEAT;
