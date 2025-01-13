@@ -11,11 +11,10 @@ namespace innova {
 
 class Innova : public esphome::climate::Climate, public PollingComponent, public modbus::ModbusDevice {
  public:
-  Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
+  //Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
   void setup() override;
   void loop() override;
-
   void dump_config() override;
   void update() override;
   void on_modbus_data(const std::vector<uint8_t> &data) override;
@@ -41,11 +40,13 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     });
     return traits;
   }
-  float current_temp_;
+
+  
 
  protected:
   bool waiting_{false};
   uint32_t last_send_{0};
+  float current_temp_{10.0};
 
   void control(const climate::ClimateCall &call) override {
     // Handle climate control actions
@@ -63,15 +64,6 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     this->publish_state();
   }
 
-  float read_temperature() {
-    // Read temperature from sensor
-    return 25.0;  // Dummy value for example
-  }
-
-  float read_humidity() {
-    // Read humidity from sensor
-    return 50.0;  // Dummy value for example
-  }
 
   void apply_control() {
     // Implement logic to control the HVAC system based on the current mode and target temperature
