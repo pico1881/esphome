@@ -3,6 +3,7 @@
 #pragma once
 
 #include "esphome.h"
+#include "esphome/components/modbus/modbus.h"
 
 namespace esphome {
 namespace innova {
