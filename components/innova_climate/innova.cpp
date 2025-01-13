@@ -79,8 +79,8 @@ void Innova::control(const climate::ClimateCall &call) {
     }
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
-      //this->target_temperature = *call.get_target_temperature();
-      send(CMD_WRITE_REG,INNOVA_SETPOINT,2,2,*call.get_target_temperature());
+      this->target_temperature = *call.get_target_temperature();
+      //send(CMD_WRITE_REG,INNOVA_SETPOINT,2,2,*call.get_target_temperature());
     }
     this->publish_state();
   }
