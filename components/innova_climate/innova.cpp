@@ -8,9 +8,16 @@ static const char *const TAG = "innova";
 
 void Innova::dump_config() { LOG_CLIMATE("", "Innova Climate", this); }
 
+void INNOVA::on_modbus_data(const std::vector<uint8_t> &data) {
+  auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
+  float value = (float) get_16bit(0);
+  this->current_temperature = value;
+  this->publish_state();
+}
 
 void Innova::update() {
-   this->current_temperature = 20.0;
+   send(CMD_READ_REG, 0, 2);
+  // this->current_temperature = 20.0;
    this->target_temperature = 21.0;
    this->mode = climate::CLIMATE_MODE_HEAT;
    this->action = climate::CLIMATE_ACTION_HEATING;
