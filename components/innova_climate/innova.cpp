@@ -5,6 +5,7 @@ namespace esphome {
 namespace innova {
 
 static const char *const TAG = "innova";
+static const uint8_t CMD_READ_REG = 0x03;
 
 void Innova::dump_config() { LOG_CLIMATE("", "Innova Climate", this); }
 
