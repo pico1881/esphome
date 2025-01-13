@@ -53,7 +53,7 @@ void Innova::update() {
    this->publish_state();
 }
 
-void Anova::control(const ClimateCall &call) {
+void Innova::control(const ClimateCall &call) {
     // Handle climate control actions
     if (call.get_mode().has_value()) {
       // User requested mode change
