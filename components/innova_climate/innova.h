@@ -41,7 +41,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     });
     return traits;
   }
-float current_temp_;
+  float current_temp_;
 
  protected:
   bool waiting_{false};
