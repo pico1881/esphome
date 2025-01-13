@@ -53,6 +53,19 @@ void Innova::update() {
    this->publish_state();
 }
 
+void Anova::control(const ClimateCall &call) {
+    // Handle climate control actions
+    if (call.get_mode().has_value()) {
+      // User requested mode change
+      this->mode = *call.get_mode();
+    }
+    if (call.get_target_temperature().has_value()) {
+      // User requested target temperature change
+      this->target_temperature = *call.get_target_temperature();
+    }
+    this->publish_state();
+  }
+
 void Innova::dump_config() { 
   LOG_CLIMATE("", "Innova Climate", this); 
   ESP_LOGCONFIG(TAG, "INNOVA:");
