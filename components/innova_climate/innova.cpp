@@ -21,7 +21,8 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 //  this->waiting_ = false;
   float value = (float) get_16bit(0);
   //this->current_temp_ = value/10.0;
-  this->current_temperature->publish_state(value);
+  this->current_temperature = value/10.0;
+  this->publish_state();
   ESP_LOGD(TAG, "Air=%.1f", value);
 }
 
