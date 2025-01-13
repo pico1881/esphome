@@ -6,6 +6,7 @@ namespace innova {
 
 static const char *const TAG = "innova";
 static const uint8_t CMD_READ_REG = 0x03;
+static const uint8_t CMD_WRITE_REG = 0x03;
 static const uint16_t INNOVA_AIR_TEMPERATURE = 0x00; // reg 0
 static const uint16_t INNOVA_WATER_TEMPERATURE = 0x01; // reg 1
 static const uint16_t INNOVA_FAN_SPEED = 0x0F; // reg 15
@@ -78,7 +79,8 @@ void Innova::control(const climate::ClimateCall &call) {
     }
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
-      this->target_temperature = *call.get_target_temperature();
+      //this->target_temperature = *call.get_target_temperature();
+      send(CMD_WRITE_REG,INNOVA_SETPOINT,2,2,*call.get_target_temperature());
     }
     this->publish_state();
   }
