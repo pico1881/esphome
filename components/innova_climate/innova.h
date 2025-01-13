@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "esphome.h"
 #include "esphome/components/modbus/modbus.h"
+#include "esphome/core/component.h"
+#include "esphome/components/climate/climate.h"
 
 namespace esphome {
 namespace innova {
