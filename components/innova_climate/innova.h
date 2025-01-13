@@ -14,6 +14,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
   void setup() override{}
+  void loop() override;
 
   void dump_config() override;
   void update() override;
