@@ -17,7 +17,7 @@ void INNOVA::on_modbus_data(const std::vector<uint8_t> &data) {
 
 void Innova::update() {
    send(CMD_READ_REG, 0, 2);
-  // this->current_temperature = 20.0;
+  // this->current_temperature = 29.0;
    this->target_temperature = 21.0;
    this->mode = climate::CLIMATE_MODE_HEAT;
    this->action = climate::CLIMATE_ACTION_HEATING;
