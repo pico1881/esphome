@@ -7,7 +7,7 @@
 namespace esphome {
 namespace innova {
 
-class Innova : public esphome::climate::Climate, public PollingComponent {
+class Innova : public esphome::climate::Climate, public PollingComponent, public modbus::ModbusDevice {
  public:
   Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
 
@@ -15,6 +15,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent {
 
   void dump_config() override;
   void update() override;
+  void on_modbus_data(const std::vector<uint8_t> &data) override;
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
