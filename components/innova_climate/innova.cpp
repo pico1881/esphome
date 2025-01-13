@@ -24,7 +24,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
      ESP_LOGW(TAG, "timed out waiting for response");
      this->waiting_ = false;
    }
-   if (this->waiting_ || (this->state_ == 0))
+   if (this->waiting_ )
      return;
    this->last_send_ = now;
    send(CMD_READ_REG, 0, 2);
