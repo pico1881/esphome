@@ -6,6 +6,12 @@ namespace innova {
 
 static const char *const TAG = "innova";
 static const uint8_t CMD_READ_REG = 0x03;
+static const uint16_t INNOVA_AIR_TEMPERATURE = 0x00; // reg 0
+static const uint16_t INNOVA_WATER_TEMPERATURE = 0x01; // reg 1
+static const uint16_t INNOVA_FAN_SPEED = 0x0F; // reg 15
+static const uint16_t INNOVA_PROGRAM = 0xC9;  // reg 201
+static const uint16_t INNOVA_SEASON = 0xE9;  // reg 233
+static const uint16_t INNOVA_SETPOINT = 0xE7; // reg 231
 
 void Innova::setup() {
    this->current_temperature = 20.0;
@@ -37,7 +43,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 //   if (this->waiting_ )
 //     return;
 //   this->last_send_ = now;
-//   send(CMD_READ_REG, 0, 2);
+//   send(CMD_READ_REG, INNOVA_AIR_TEMPERATURE, 2);
 //   this->waiting_ = true;
  }
 
