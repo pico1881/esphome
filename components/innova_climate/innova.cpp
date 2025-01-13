@@ -21,7 +21,7 @@ void Innova::update() {
    this->target_temperature = 21.0;
    this->mode = climate::CLIMATE_MODE_HEAT;
    this->action = climate::CLIMATE_ACTION_HEATING;
-   this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
+   this->fan_mode = climate::CLIMATE_FAN_LOW;
    this->publish_state();
 }
 
