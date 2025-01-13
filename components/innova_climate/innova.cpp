@@ -20,8 +20,9 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 //  this->waiting_ = false;
   float value = (float) get_16bit(0);
+  value /= 10.0;
   //this->current_temp_ = value/10.0;
-  this->current_temperature = value/10.0;
+  this->current_temperature = value;
   this->publish_state();
   ESP_LOGD(TAG, "Air=%.1f", value);
 }
