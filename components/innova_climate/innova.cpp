@@ -31,7 +31,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
    switch (this->state_) {
      case 1:
        value /= 10.0;
-       ESP_LOGD(TAG, "Air=%.1f", value);
+       ESP_LOGD(TAG, "Current=%.1f", value);
        this->current_temp_ = value;
        break;
      case 2:
@@ -79,10 +79,10 @@ void Innova::control(const climate::ClimateCall &call) {
     }
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
-      //this->target_temperature = *call.get_target_temperature();
-      int target = *call.get_target_temperature() * 10;
+      this->target_temperature = *call.get_target_temperature();
+      int target = (int) *call.get_target_temperature() * 10;
       ESP_LOGD(TAG, "SetTemp=%x", target);
-      send(CMD_WRITE_REG,INNOVA_SETPOINT,2,target);
+      //send(CMD_WRITE_REG,INNOVA_SETPOINT,2,target);
     }
     this->publish_state();
   }
