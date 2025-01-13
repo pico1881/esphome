@@ -44,6 +44,9 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
 float current_temp_;
 
  protected:
+  bool waiting_{false};
+  uint32_t last_send_{0};
+
   void control(const climate::ClimateCall &call) override {
     // Handle climate control actions
     if (call.get_mode().has_value()) {
