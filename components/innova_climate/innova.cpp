@@ -128,12 +128,12 @@ void Innova::dump_config() {
   LOG_CLIMATE("", "Innova Climate", this); 
   ESP_LOGCONFIG(TAG, "INNOVA:");
   ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
-  ESP_LOGD(TAG, "Air temperature=%.1f", current_temp_);
-  ESP_LOGD(TAG, "Setpoint temperature=%.1f", target_temp_);
-  ESP_LOGD(TAG, "Fan speed=%.1f", fan_speed_);
-  ESP_LOGD(TAG, "Program=%.1f", program_);
-  ESP_LOGD(TAG, "Season=%.1f", season_);
-  ESP_LOGD(TAG, "Water temperature=%.1f", water_temp_);
+  ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
+  ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
+  ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
+  ESP_LOGD(TAG, "Program=%.1f", this->program_);
+  ESP_LOGD(TAG, "Season=%.1f", this->season_);
+  ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
 }
 
 }  // namespace innova
