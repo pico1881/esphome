@@ -49,7 +49,6 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
      this->state_ = 0;
    
    this->publish_state();
-
 }
 
 void Innova::loop() {
@@ -67,16 +66,11 @@ void Innova::loop() {
 }
 
 void Innova::update() {
-   //send(CMD_READ_REG, 0, 2);
    this->state_ = 1;
-   //this->current_temperature = this->current_temp_;
-   //this->target_temperature = this->target_temp_;
-   //this->publish_state();
 }
 
 void Innova::control(const climate::ClimateCall &call) {
     // Handle climate control actions
-
     if (call.get_mode().has_value()) {
      this->mode = *call.get_mode();    
       climate::ClimateMode mode = *call.get_mode();
@@ -100,7 +94,6 @@ void Innova::control(const climate::ClimateCall &call) {
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
       this->target_temperature = *call.get_target_temperature();
-
       float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "Set Target=%.1f", target);
       write_register(target, INNOVA_SETPOINT);
@@ -114,8 +107,6 @@ void Innova::write_register(float new_value, uint16_t address)
       uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
       send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
 }
-
-
 
 void Innova::dump_config() { 
   LOG_CLIMATE("", "Innova Climate", this); 
