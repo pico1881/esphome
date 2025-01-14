@@ -28,7 +28,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
   this->waiting_ = false;
-  ESP_LOGD(TAG, "Data: %s", hexencode(data).c_str());
+  ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 	
   float value = (float) get_16bit(0);
    switch (this->state_) {
@@ -88,9 +88,7 @@ void Innova::control(const climate::ClimateCall &call) {
       ESP_LOGD(TAG, "SetTemp=%.1f", target);
       write_register(target);
       
-     // uint16_t new_temp = target;
-     // uint8_t payload[] = {(uint8_t)(new_temp >> 8), (uint8_t)new_temp };
-    //  send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
+
     }
     this->publish_state();
   }
