@@ -85,10 +85,12 @@ void Innova::control(const climate::ClimateCall &call) {
       //int target = (int) temp;
       float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "SetTemp=%d", target);
-      uint8_t payload[2];
+      
       uint16_t new_temp = target;
-      payload[0] = (new_temp / 256) & 0xFF;
-      payload[1] = new_temp & 0xFF;
+      //uint8_t payload[2];
+      //payload[0] = (new_temp / 256) & 0xFF;
+      //payload[1] = new_temp & 0xFF;
+      uint8_t payload[] = {(uint8_t)(new_temp >> 8), (uint8_t)new_temp };
 	
       send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
      // send(CMD_WRITE_REG,INNOVA_SETPOINT,2,target);
