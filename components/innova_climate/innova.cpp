@@ -44,8 +44,12 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
        //this->target_temp_ = value;
        this->target_temperature = value;     
        break;
+     case 3:
+       ESP_LOGD(TAG, "Fan speed=%d", value);
+       this->fan_speed_ = value;   
+       break;
    }
-   if (++this->state_ > 2)
+   if (++this->state_ > 3)
      this->state_ = 0;
    
    this->publish_state();
