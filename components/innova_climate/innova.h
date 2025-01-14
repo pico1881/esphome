@@ -52,9 +52,9 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   float current_temp_{10.0};
   float target_temp_{10.0};
   float water_temp_;
-  int fan_speed_;
-  int program_;
-  int season_;
+  float fan_speed_;
+  float program_;
+  float season_;
 
   void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
