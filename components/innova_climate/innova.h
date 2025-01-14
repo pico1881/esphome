@@ -51,6 +51,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   uint32_t last_send_{0};
   float current_temp_{10.0};
   float target_temp_{10.0};
+  float water_temp_;
   int fan_speed_;
   int program_;
   int season_;
