@@ -111,19 +111,19 @@ void Innova::control(const climate::ClimateCall &call) {
       switch (mode) {
 	case climate::CLIMATE_MODE_OFF:
           ESP_LOGD(TAG, "Set Climate Mode: OFF");
-	  write_register((new_prg | (1 << 7)), INNOVA_PROGRAM, False);
+	  write_register((new_prg | (1 << 7)), INNOVA_PROGRAM, false);
 	  break;
 	case climate::CLIMATE_MODE_HEAT:
 	  ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 		
 	  //write_register(3, INNOVA_SEASON);
-	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM, False);	
+	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM, false);	
 		
 	  break;
 	case climate::CLIMATE_MODE_COOL:
 	  ESP_LOGD(TAG, "Set Climate Mode:COOL");
 	  //write_register(5, INNOVA_SEASON);
-	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM, False);	
+	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM, false);	
 	  break;
 	default:
 	  ESP_LOGW(TAG, "Unsupported mode: %d", mode);
@@ -142,7 +142,7 @@ void Innova::control(const climate::ClimateCall &call) {
 		  default: mode = 2; break;
 	  }
 	  ESP_LOGD(TAG, "Fan mode set to: %i", mode);
-	  write_register(mode, INNOVA_PROGRAM, False);
+	  write_register(mode, INNOVA_PROGRAM, false);
     }
 	
     if (call.get_target_temperature().has_value()) {
@@ -150,7 +150,7 @@ void Innova::control(const climate::ClimateCall &call) {
       this->target_temperature = *call.get_target_temperature();
       float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "Set Target=%.1f", target);
-      write_register(target, INNOVA_SETPOINT, False);
+      write_register(target, INNOVA_SETPOINT, false);
     }
     this->publish_state();
   }
