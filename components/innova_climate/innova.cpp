@@ -28,7 +28,18 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
   this->waiting_ = false;
-  //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+  ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+
+	//  Command response is 4 bytes echoing the write command
+	if (waiting_for_write_ack_ )  {
+		waiting_for_write_ack_ = false ; 
+		if (data.size() == 4) {
+			ESP_LOGD(TAG, "Write command succeeded");
+		} else {
+			ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
+		}
+		return ; 
+	}
 	
   float value = (float) get_16bit(0);
   int fan_value = (int) value & 0b111;
@@ -151,13 +162,14 @@ void Innova::control(const climate::ClimateCall &call) {
       ESP_LOGD(TAG, "Set Target=%.1f", target);
       write_register(target, INNOVA_SETPOINT);
     }
-    this->publish_state();
+    //this->publish_state();
   }
 
 void Innova::write_register(float new_value, uint16_t address)
 {
       uint16_t value_to_write = new_value;
       uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
+      waiting_for_write_ack_= true;
       send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
 
 }
