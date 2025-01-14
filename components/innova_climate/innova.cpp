@@ -57,6 +57,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
        this->season_ = value;   
        break;
      case 6:
+       value /= 10.0;
        //ESP_LOGD(TAG, "Water temperature=%.1f", value);
        this->water_temp_ = value;   
        break;
