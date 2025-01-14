@@ -34,13 +34,13 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
    switch (this->state_) {
      case 1:
        value /= 10.0;
-       ESP_LOGD(TAG, "Current=%.1f", value);
+       ESP_LOGD(TAG, "Current temperature=%.1f", value);
        //this->current_temp_ = value;
        this->current_temperature = value;
        break;
      case 2:
        value /= 10.0;
-       ESP_LOGD(TAG, "Target=%.1f", value);
+       ESP_LOGD(TAG, "Target temperature=%.1f", value);
        //this->target_temp_ = value;
        this->target_temperature = value;     
        break;
@@ -82,13 +82,15 @@ void Innova::control(const climate::ClimateCall &call) {
       climate::ClimateMode mode = *call.get_mode();
       switch (mode) {
 	case climate::CLIMATE_MODE_OFF:
-          ESP_LOGD(TAG, "SetClimateMode: %d", mode);
+          ESP_LOGD(TAG, "Set Climate Mode: OFF");
 	  break;
 	case climate::CLIMATE_MODE_HEAT:
-	  ESP_LOGD(TAG, "SetClimateMode: %d", mode);
+	  ESP_LOGD(TAG, "Set Climate Mode: HEAT");
+	  write_register(3, INNOVA_SETPOINT);
 	  break;
 	case climate::CLIMATE_MODE_COOL:
-	  ESP_LOGD(TAG, "SetClimateMode: %d", mode);
+	  ESP_LOGD(TAG, "Set Climate Mode:COOL");
+	  write_register(5, INNOVA_SETPOINT);
 	  break;
 	default:
 	  ESP_LOGW(TAG, "Unsupported mode: %d", mode);
@@ -100,7 +102,7 @@ void Innova::control(const climate::ClimateCall &call) {
       this->target_temperature = *call.get_target_temperature();
 
       float target = *call.get_target_temperature() * 10.0;
-      ESP_LOGD(TAG, "SetTemp=%.1f", target);
+      ESP_LOGD(TAG, "Set Target=%.1f", target);
       write_register(target, INNOVA_SETPOINT);
     }
     this->publish_state();
