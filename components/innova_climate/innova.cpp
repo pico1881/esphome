@@ -13,7 +13,7 @@ static const uint16_t INNOVA_FAN_SPEED = 0x0F; // reg 15
 static const uint16_t INNOVA_PROGRAM = 0xC9;  // reg 201
 static const uint16_t INNOVA_SEASON = 0xE9;  // reg 233
 static const uint16_t INNOVA_SETPOINT = 0xE7; // reg 231
-static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_SETPOINT};
+static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_SETPOINT, INNOVA_FAN_SPEED, INNOVA_PROGRAM, INNOVA_SEASON, INNOVA_WATER_TEMPERATURE};
 
 void Innova::setup() {
    this->current_temperature = 20.0;
