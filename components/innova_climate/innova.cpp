@@ -104,26 +104,24 @@ void Innova::update() {
 
 void Innova::control(const climate::ClimateCall &call) {
     // Handle climate control actions
+    int new_prg = (int) this->program_;
     if (call.get_mode().has_value()) {
      this->mode = *call.get_mode();    
       climate::ClimateMode mode = *call.get_mode();
       switch (mode) {
 	case climate::CLIMATE_MODE_OFF:
           ESP_LOGD(TAG, "Set Climate Mode: OFF");
-		int new_prg = (int) this->program_;
 	  write_register((new_prg | (1 << 7)), INNOVA_PROGRAM);
 	  break;
 	case climate::CLIMATE_MODE_HEAT:
 	  ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 	  write_register(3, INNOVA_SEASON);
-	  int new_prg = (int) this->program_;
 	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);	
 		
 	  break;
 	case climate::CLIMATE_MODE_COOL:
 	  ESP_LOGD(TAG, "Set Climate Mode:COOL");
 	  write_register(5, INNOVA_SEASON);
-		int new_prg = (int) this->program_;
 	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);	
 	  break;
 	default:
