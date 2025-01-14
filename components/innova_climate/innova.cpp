@@ -76,10 +76,7 @@ void Innova::update() {
 
 void Innova::control(const climate::ClimateCall &call) {
     // Handle climate control actions
-    if (call.get_mode().has_value()) {
-      // User requested mode change
-      this->mode = *call.get_mode();
-    }
+
     if (call.get_mode().has_value()) {
      this->mode = *call.get_mode();    
       climate::ClimateMode mode = *call.get_mode();
@@ -96,6 +93,7 @@ void Innova::control(const climate::ClimateCall &call) {
 	default:
 	  ESP_LOGW(TAG, "Unsupported mode: %d", mode);
 	  return;
+      }
     }
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
@@ -104,8 +102,6 @@ void Innova::control(const climate::ClimateCall &call) {
       float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "SetTemp=%.1f", target);
       write_register(target, INNOVA_SETPOINT);
-      
-
     }
     this->publish_state();
   }
