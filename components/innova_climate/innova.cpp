@@ -160,7 +160,7 @@ void Innova::write_register(float new_value, uint16_t address, bool multiple_reg
       uint16_t value_to_write = new_value;
       uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
       send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
-      if (this->multiple_reg_write )
+      if (multiple_reg_write )
         return;
 }
 
