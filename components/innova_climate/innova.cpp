@@ -31,6 +31,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 	
   float value = (float) get_16bit(0);
+  int value_i = (int) value;
    switch (this->state_) {
      case 1:
        value /= 10.0;
@@ -53,7 +54,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
        this->program_ = value;   
 	climate::ClimateFanMode fmode;
 	//auto fstate = (int)value;
-        switch (this->program_) {
+        switch (value_i) {
 	  case 0: fmode = climate::CLIMATE_FAN_AUTO; break;
           case 1: fmode = climate::CLIMATE_FAN_MEDIUM; break;
           case 2: fmode = climate::CLIMATE_FAN_LOW; break;
