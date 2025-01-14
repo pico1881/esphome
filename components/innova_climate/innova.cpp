@@ -28,7 +28,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
   auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
   this->waiting_ = false;
-  ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+  //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 	
   float value = (float) get_16bit(0);
   int fan_value = (int) value & 0b111;
