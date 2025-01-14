@@ -82,7 +82,7 @@ void Innova::control(const climate::ClimateCall &call) {
     }
     if (call.get_mode().has_value()) {
      this->mode = *call.get_mode();    
-      ClimateMode mode = *call.get_mode();
+      climate::ClimateMode mode = *call.get_mode();
       switch (mode) {
 	case climate::CLIMATE_MODE_OFF:
           ESP_LOGD(TAG, "SetClimateMode: %d", mode);
