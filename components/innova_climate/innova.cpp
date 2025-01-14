@@ -103,18 +103,18 @@ void Innova::control(const climate::ClimateCall &call) {
 
       float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "SetTemp=%.1f", target);
-      write_register(target);
+      write_register(target, INNOVA_SETPOINT);
       
 
     }
     this->publish_state();
   }
 
-void Innova::write_register(float new_value)
+void Innova::write_register(float new_value, uint16_t address)
 {
       uint16_t value_to_write = new_value;
       uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
-      send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
+      send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
 }
 
 
