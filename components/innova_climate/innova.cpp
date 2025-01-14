@@ -34,30 +34,30 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
    switch (this->state_) {
      case 1:
        value /= 10.0;
-       ESP_LOGD(TAG, "Current temperature=%.1f", value);
-       //this->current_temp_ = value;
+       //ESP_LOGD(TAG, "Current temperature=%.1f", value);
+       this->current_temp_ = value;
        this->current_temperature = value;
        break;
      case 2:
        value /= 10.0;
-       ESP_LOGD(TAG, "Target temperature=%.1f", value);
-       //this->target_temp_ = value;
+       //ESP_LOGD(TAG, "Target temperature=%.1f", value);
+       this->target_temp_ = value;
        this->target_temperature = value;     
        break;
      case 3:
-       ESP_LOGD(TAG, "Fan speed=%.1f", value);
+       //ESP_LOGD(TAG, "Fan speed=%.1f", value);
        this->fan_speed_ = value;   
        break;
      case 4:
-       ESP_LOGD(TAG, "Program=%.1f", value);
+       //ESP_LOGD(TAG, "Program=%.1f", value);
        this->program_ = value;   
        break;
      case 5:
-       ESP_LOGD(TAG, "Season=%.1f", value);
+       //ESP_LOGD(TAG, "Season=%.1f", value);
        this->season_ = value;   
        break;
      case 6:
-       ESP_LOGD(TAG, "Water temperature=%.1f", value);
+       //ESP_LOGD(TAG, "Water temperature=%.1f", value);
        this->water_temp_ = value;   
        break;
    }
@@ -128,6 +128,12 @@ void Innova::dump_config() {
   LOG_CLIMATE("", "Innova Climate", this); 
   ESP_LOGCONFIG(TAG, "INNOVA:");
   ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
+  ESP_LOGD(TAG, "Air temperature=%.1f", current_temp_);
+  ESP_LOGD(TAG, "Setpoint temperature=%.1f", target_temp_);
+  ESP_LOGD(TAG, "Fan speed=%.1f", fan_speed_);
+  ESP_LOGD(TAG, "Program=%.1f", program_);
+  ESP_LOGD(TAG, "Season=%.1f", season_);
+  ESP_LOGD(TAG, "Water temperature=%.1f", water_temp_);
 }
 
 }  // namespace innova
