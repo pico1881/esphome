@@ -86,11 +86,11 @@ void Innova::control(const climate::ClimateCall &call) {
 	  break;
 	case climate::CLIMATE_MODE_HEAT:
 	  ESP_LOGD(TAG, "Set Climate Mode: HEAT");
-	  write_register(3, INNOVA_SETPOINT);
+	  write_register(3, INNOVA_SEASON);
 	  break;
 	case climate::CLIMATE_MODE_COOL:
 	  ESP_LOGD(TAG, "Set Climate Mode:COOL");
-	  write_register(5, INNOVA_SETPOINT);
+	  write_register(5, INNOVA_SEASON);
 	  break;
 	default:
 	  ESP_LOGW(TAG, "Unsupported mode: %d", mode);
