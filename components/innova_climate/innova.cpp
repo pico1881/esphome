@@ -81,8 +81,9 @@ void Innova::control(const climate::ClimateCall &call) {
       // User requested target temperature change
       this->target_temperature = *call.get_target_temperature();
 
-      float temp = *call.get_target_temperature() * 10.0;
-      int target = (int) temp;
+      //float temp = *call.get_target_temperature() * 10.0;
+      //int target = (int) temp;
+      float target = *call.get_target_temperature() * 10.0;
       ESP_LOGD(TAG, "SetTemp=%d", target);
       uint8_t payload[2];
       uint16_t new_temp = target;
