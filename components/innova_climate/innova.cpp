@@ -59,7 +59,7 @@ void Innova::loop() {
   if (this->waiting_ || (this->state_ == 0))
     return;
   this->last_send_ = now;
-  send(CMD_READ_REG, REGISTER[this->state_ - 1], 2);
+  send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);
   this->waiting_ = true;
 }
 
