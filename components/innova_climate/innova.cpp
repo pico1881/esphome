@@ -113,6 +113,21 @@ void Innova::control(const climate::ClimateCall &call) {
 	  return;
       }
     }
+
+    if (call.get_fan_mode().has_value()) {
+	  int mode;
+	  this->fan_mode = *call.get_fan_mode();
+	  switch (fan_mode.value()) {
+		  case climate::CLIMATE_FAN_LOW: mode = 2; break;
+		  case climate::CLIMATE_FAN_MEDIUM: mode = 1; break;
+		  case climate::CLIMATE_FAN_HIGH: mode = 3; break;
+		  case climate::CLIMATE_FAN_AUTO: mode = 0; break;
+		  default: mode = 2; break;
+	  }
+	  ESP_LOGD(TAG, "Fan mode set to: %i", mode);
+	  write_register(mode, INNOVA_PROGRAM);
+    }
+	
     if (call.get_target_temperature().has_value()) {
       // User requested target temperature change
       this->target_temperature = *call.get_target_temperature();
