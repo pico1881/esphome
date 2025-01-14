@@ -84,22 +84,25 @@ void Innova::control(const climate::ClimateCall &call) {
       // User requested target temperature change
       this->target_temperature = *call.get_target_temperature();
 
-      //float temp = *call.get_target_temperature() * 10.0;
-      //int target = (int) temp;
       float target = *call.get_target_temperature() * 10.0;
-      ESP_LOGD(TAG, "SetTemp=%f", target);
+      ESP_LOGD(TAG, "SetTemp=%.1f", target);
+      write_register(target);
       
-      uint16_t new_temp = target;
-      //uint8_t payload[2];
-      //payload[0] = (new_temp / 256) & 0xFF;
-      //payload[1] = new_temp & 0xFF;
-      uint8_t payload[] = {(uint8_t)(new_temp >> 8), (uint8_t)new_temp };
-	
-      send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
-     // send(CMD_WRITE_REG,INNOVA_SETPOINT,2,target);
+     // uint16_t new_temp = target;
+     // uint8_t payload[] = {(uint8_t)(new_temp >> 8), (uint8_t)new_temp };
+    //  send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
     }
     this->publish_state();
   }
+
+void Innova::write_register(float new_value)
+{
+      uint16_t value_to_write = new_value;
+      uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
+      send(CMD_WRITE_REG,INNOVA_SETPOINT,1,sizeof(payload),payload);
+}
+
+
 
 void Innova::dump_config() { 
   LOG_CLIMATE("", "Innova Climate", this); 
