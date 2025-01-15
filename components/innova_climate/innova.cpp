@@ -125,28 +125,27 @@ void Innova::control(const climate::ClimateCall &call) {
       climate::ClimateMode mode = *call.get_mode();
       switch (mode) {
 	      case climate::CLIMATE_MODE_OFF:
-          //ESP_LOGD(TAG, "Set Climate Mode: OFF");
-	        //write_register((new_prg | (1 << 7)), INNOVA_PROGRAM);
-		      new_prg = curr_prg | (1 << 7);
+                ESP_LOGD(TAG, "Set Climate Mode: OFF");
+		new_prg = curr_prg | (1 << 7);
+		write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      case climate::CLIMATE_MODE_HEAT:
-	        //ESP_LOGD(TAG, "Set Climate Mode: HEAT");
+	        ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 	        write_register(3, INNOVA_SEASON);
-	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
-		      new_prg = curr_prg & ~(1 << 7);    
+		new_prg = curr_prg & ~(1 << 7);  
+		//write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      case climate::CLIMATE_MODE_COOL:
-	        //ESP_LOGD(TAG, "Set Climate Mode:COOL");
+	        ESP_LOGD(TAG, "Set Climate Mode:COOL");
 	        write_register(5, INNOVA_SEASON);
-	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
-		      new_prg = curr_prg & ~(1 << 7);     
+		new_prg = curr_prg & ~(1 << 7);
+		//write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      default: 
 		      ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
 	      break;
-      }
-	    ESP_LOGD(TAG, "Climate mode set to: %i", mode);	    
-	    write_register(new_prg, INNOVA_PROGRAM);
+      }	    
+	    //write_register(new_prg, INNOVA_PROGRAM);
     }
 
     if (call.get_fan_mode().has_value()) {
