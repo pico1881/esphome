@@ -113,35 +113,46 @@ void Innova::update() {
 }
 
 void Innova::control(const climate::ClimateCall &call) {
-    // Handle climate control actions
-    int new_prg = (int) this->program_;
-    if (call.get_mode().has_value()) {
-     this->mode = *call.get_mode();    
-      climate::ClimateMode mode = *call.get_mode();
-      switch (mode) {
-	case climate::CLIMATE_MODE_OFF:
-          ESP_LOGD(TAG, "Set Climate Mode: OFF");
-	  write_register((new_prg | (1 << 7)), INNOVA_PROGRAM);
-	  break;
-	case climate::CLIMATE_MODE_HEAT:
-	  ESP_LOGD(TAG, "Set Climate Mode: HEAT");
-		
-	  write_register(3, INNOVA_SEASON);
-	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);	
-		
-	  break;
-	case climate::CLIMATE_MODE_COOL:
-	  ESP_LOGD(TAG, "Set Climate Mode:COOL");
-	  write_register(5, INNOVA_SEASON);
-	  write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);	
-	  break;
-	default:
-	  ESP_LOGW(TAG, "Unsupported mode: %d", mode);
-	  return;
-      }
+
+    if (call.get_mode().has_value()) 
+    {
+        int curr_prg = (int) this->program_;
+	int new_prg;
+        int seas;	    
+        this->mode = *call.get_mode();    
+        climate::ClimateMode mode = *call.get_mode();
+        switch (mode) {
+	    case climate::CLIMATE_MODE_OFF:
+                //ESP_LOGD(TAG, "Set Climate Mode: OFF");
+	        //write_register((new_prg | (1 << 7)), INNOVA_PROGRAM);
+		new_prg = curr_prg | (1 << 7);
+	    break;
+	    case climate::CLIMATE_MODE_HEAT:
+	        //ESP_LOGD(TAG, "Set Climate Mode: HEAT");
+	        //write_register(3, INNOVA_SEASON);
+	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
+		seas = 3;
+		new_prg = curr_prg & ~(1 << 7);    
+	    break;
+	    case climate::CLIMATE_MODE_COOL:
+	        //ESP_LOGD(TAG, "Set Climate Mode:COOL");
+	        //write_register(5, INNOVA_SEASON);
+	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
+		seas = 5;
+		new_prg = curr_prg & ~(1 << 7);     
+	     break;
+	     default: 
+		ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
+	    break;
+        }
+	  ESP_LOGD(TAG, "Climate mode set to: %i", mode);
+	  write_register(seas, INNOVA_SEASON);	    
+	  write_register(new_prg, INNOVA_PROGRAM);
+	    
     }
 
-    if (call.get_fan_mode().has_value()) {
+    if (call.get_fan_mode().has_value()) 
+    {
 	  int mode;
 	  this->fan_mode = *call.get_fan_mode();
 	  switch (fan_mode.value()) {
@@ -178,12 +189,12 @@ void Innova::dump_config() {
   LOG_CLIMATE("", "Innova Climate", this); 
   ESP_LOGCONFIG(TAG, "INNOVA:");
   ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
-  ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
-  ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
-  ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
-  ESP_LOGD(TAG, "Program=%.1f", this->program_);
-  ESP_LOGD(TAG, "Season=%.1f", this->season_);
-  ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
+//  ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
+//  ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
+//  ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
+//  ESP_LOGD(TAG, "Program=%.1f", this->program_);
+//  ESP_LOGD(TAG, "Season=%.1f", this->season_);
+//  ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
 }
 
 }  // namespace innova
