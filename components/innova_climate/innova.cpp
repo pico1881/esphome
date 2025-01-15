@@ -28,6 +28,10 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
     this->waiting_ = false;
+    if (!waiting_for_write_ack_ && data.size() < REGISTER_COUNT[this->state_ - 1] * 2) {
+		  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
+		return;
+	}
     ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 
   	//  Command response is 4 bytes echoing the write command
