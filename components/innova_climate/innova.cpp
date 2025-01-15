@@ -118,7 +118,7 @@ void Innova::control(const climate::ClimateCall &call) {
     {
         int curr_prg = (int) this->program_;
 	int new_prg;
-        int seas;	    
+        //int seas;	    
         this->mode = *call.get_mode();    
         climate::ClimateMode mode = *call.get_mode();
         switch (mode) {
@@ -129,16 +129,16 @@ void Innova::control(const climate::ClimateCall &call) {
 	    break;
 	    case climate::CLIMATE_MODE_HEAT:
 	        //ESP_LOGD(TAG, "Set Climate Mode: HEAT");
-	        //write_register(3, INNOVA_SEASON);
+	        write_register(3, INNOVA_SEASON);
 	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
-		seas = 3;
+		//seas = 3;
 		new_prg = curr_prg & ~(1 << 7);    
 	    break;
 	    case climate::CLIMATE_MODE_COOL:
 	        //ESP_LOGD(TAG, "Set Climate Mode:COOL");
-	        //write_register(5, INNOVA_SEASON);
+	        write_register(5, INNOVA_SEASON);
 	        //write_register((new_prg & ~(1 << 7)), INNOVA_PROGRAM);
-		seas = 5;
+		//seas = 5;
 		new_prg = curr_prg & ~(1 << 7);     
 	     break;
 	     default: 
@@ -146,7 +146,7 @@ void Innova::control(const climate::ClimateCall &call) {
 	    break;
         }
 	  ESP_LOGD(TAG, "Climate mode set to: %i", mode);
-	  write_register(seas, INNOVA_SEASON);	    
+	  //write_register(seas, INNOVA_SEASON);	    
 	  write_register(new_prg, INNOVA_PROGRAM);
 	    
     }
