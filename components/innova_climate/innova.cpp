@@ -176,7 +176,7 @@ void Innova::control(const climate::ClimateCall &call) {
       ESP_LOGD(TAG, "Set Target=%.1f", target);
       write_register(target, INNOVA_SETPOINT);
     }
-    //this->publish_state();
+    this->publish_state();
 }
 
 void Innova::write_register(float new_value, uint16_t address)
