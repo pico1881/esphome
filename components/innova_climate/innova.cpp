@@ -81,7 +81,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         //ESP_LOGD(TAG, "Season=%.1f", value);
         this->season_ = value;   
     	climate::ClimateMode smode;
-        switch (value) {
+        switch ((int)value) {
 	  case 3: smode = climate::CLIMATE_MODE_HEAT; break;
           case 5: smode = climate::CLIMATE_MODE_COOL; break;
           default: smode = climate::CLIMATE_MODE_HEAT; break;
