@@ -101,6 +101,8 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 	this->action = climate::CLIMATE_ACTION_HEATING;
     } else if (this->season_ == 5.0 && this->fan_speed_ > 0.0){
 	this->action = climate::CLIMATE_ACTION_COOLING;
+    } else if (this->program_ & (1<<7)){
+	this->action = climate::CLIMATE_ACTION_OFF;	
     } else {
         this->action = climate::CLIMATE_ACTION_IDLE;  
     }
