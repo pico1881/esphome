@@ -18,9 +18,9 @@ static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_SETPOINT, INN
 void Innova::setup() {
     this->current_temperature = 20.0;
     this->target_temperature = 21.0;
-    this->mode = climate::CLIMATE_MODE_HEAT;
-    this->action = climate::CLIMATE_ACTION_HEATING;
-    this->fan_mode = climate::CLIMATE_FAN_LOW;
+    //this->mode = climate::CLIMATE_MODE_HEAT;
+    //this->action = climate::CLIMATE_ACTION_HEATING;
+    //this->fan_mode = climate::CLIMATE_FAN_LOW;
     this->publish_state();
 }
 
@@ -96,6 +96,15 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     }
     if (++this->state_ > 6)
       this->state_ = 0;
+	
+    if (this->season_ == 3 && this->fan_speed_ >0){
+	this->action = climate::CLIMATE_ACTION_HEATING;
+    } eslse if (this->season_ == 5 && this->fan_speed_ >0){
+	this->action = climate::CLIMATE_ACTION_COOLING;
+    } else {
+        this->action = climate::CLIMATE_ACTION_IDLE;  
+    }
+	    
     ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
     ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
     ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
