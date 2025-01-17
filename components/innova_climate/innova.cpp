@@ -186,7 +186,7 @@ void Innova::write_register(float new_value, uint16_t address)
     data.write_value    = new_value;
     data.register_value = address;
     writequeue_.emplace_back(data);
-    ESP_LOGD(TAG, "Data write pending.... (%i)", data.write_value);
+    ESP_LOGD(TAG, "Data write pending: value (%i), address (%i)", data.write_value, data.register_value);
     
     uint16_t value_to_write = new_value;
     uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
