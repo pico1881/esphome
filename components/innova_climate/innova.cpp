@@ -81,7 +81,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             } else if (this->season_ == 5) {
                 this->mode = climate::CLIMATE_MODE_COOL;
             } else if (this->program_ & (1<<7)) {
-                this->mode = climate::CLIMATE_MODE_COOL;
+                this->mode = climate::CLIMATE_MODE_OFF;
             }
             
             //switch ((int)value) {
