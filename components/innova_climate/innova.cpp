@@ -43,7 +43,6 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
     switch (this->state_) {
       case 1:
         value /= 10.0;
-        //ESP_LOGD(TAG, "Current temperature=%.1f", value);
         this->current_temp_ = value;
         this->current_temperature = value;
         ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
@@ -51,20 +50,17 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
       break;
       case 2:
         value /= 10.0;
-        //ESP_LOGD(TAG, "Target temperature=%.1f", value);
         this->target_temp_ = value;
         this->target_temperature = value;    
         ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
         this->publish_state();
       break;
       case 3:
-        //ESP_LOGD(TAG, "Fan speed=%.1f", value);
         this->fan_speed_ = value;   
         ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
         this->publish_state();
       break;
       case 4:
-        //ESP_LOGD(TAG, "Program=%.1f", value);
         this->program_ = value;   
     	climate::ClimateFanMode fmode;
         switch ((int) value & 0b111) {
@@ -79,7 +75,6 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         this->publish_state();
        break;
       case 5:
-        //ESP_LOGD(TAG, "Season=%.1f", value);
         this->season_ = value;   
     	climate::ClimateMode smode;
         switch ((int)value) {
@@ -102,7 +97,6 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
       break;
       case 6:
         value /= 10.0;
-        //ESP_LOGD(TAG, "Water temperature=%.1f", value);
         this->water_temp_ = value;   
         ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
         this->publish_state();
@@ -134,18 +128,17 @@ void Innova::update() {
 }
 
 void Innova::control(const climate::ClimateCall &call) {
-
     if (call.get_mode().has_value()) {
-      int curr_prg = (int) this->program_;
-	    int new_prg = curr_prg;	    
-      this->mode = *call.get_mode();    
-      climate::ClimateMode mode = *call.get_mode();
-      switch (mode) {
-	      case climate::CLIMATE_MODE_OFF:
-            ESP_LOGD(TAG, "Set Climate Mode: OFF");
-	     	new_prg = curr_prg | (1 << 7);
-	    	write_register(new_prg, INNOVA_PROGRAM);
-	      break;
+	    int curr_prg = (int) this->program_;
+	    int new_prg = curr_prg;
+	    this->mode = *call.get_mode();
+	    climate::ClimateMode mode = *call.get_mode();
+	    switch (mode) {
+		case climate::CLIMATE_MODE_OFF:
+		    ESP_LOGD(TAG, "Set Climate Mode: OFF");
+		    new_prg = curr_prg | (1 << 7);
+			    write_register(new_prg, INNOVA_PROGRAM);
+		break;
 	      case climate::CLIMATE_MODE_HEAT:
 	        ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 	        write_register(3, INNOVA_SEASON);
