@@ -61,7 +61,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         this->publish_state();
       break;
       case 4:
-        this->program_ = value;   
+        this->program_ = (int)value;   
     	climate::ClimateFanMode fmode;
         switch ((int) value & 0b111) {
 	  case 0: fmode = climate::CLIMATE_FAN_AUTO; break;
@@ -71,11 +71,11 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
           default: fmode = climate::CLIMATE_FAN_OFF; break;
         }
         this->fan_mode = fmode;    
-        ESP_LOGD(TAG, "Program=%.1f", this->program_);
+        ESP_LOGD(TAG, "Program=%d", this->program_);
         this->publish_state();
        break;
       case 5:
-        this->season_ = value;   
+        this->season_ = (int)value;   
     	climate::ClimateMode smode;
         switch ((int)value) {
 	  case 3: smode = climate::CLIMATE_MODE_HEAT; break;
@@ -83,16 +83,16 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
           default: smode = climate::CLIMATE_MODE_HEAT; break;
         }
         this->mode = smode; 
-	if (this->season_ == 3.0 && this->fan_speed_ > 0.0){
+	if (this->season_ == 3 && this->fan_speed_ > 0){
 	  this->action = climate::CLIMATE_ACTION_HEATING;
-        } else if (this->season_ == 5.0 && this->fan_speed_ > 0.0){
+        } else if (this->season_ == 5 && this->fan_speed_ > 0){
 	  this->action = climate::CLIMATE_ACTION_COOLING;
-        } else if ((int)this->program_ & (1<<7)){
+        } else if (this->program_ & (1<<7)){
           this->action = climate::CLIMATE_ACTION_OFF;	
         } else {
           this->action = climate::CLIMATE_ACTION_IDLE;  
         }
-        ESP_LOGD(TAG, "Season=%.1f", this->season_);
+        ESP_LOGD(TAG, "Season=%d", this->season_);
         this->publish_state();
       break;
       case 6:
@@ -129,7 +129,7 @@ void Innova::update() {
 
 void Innova::control(const climate::ClimateCall &call) {
     if (call.get_mode().has_value()) {
-	    int curr_prg = (int) this->program_;
+	    int curr_prg = this->program_;
 	    int new_prg = curr_prg;
 	    this->mode = *call.get_mode();
 	    climate::ClimateMode mode = *call.get_mode();
