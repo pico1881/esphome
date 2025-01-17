@@ -55,12 +55,13 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   float target_temp_{10.0};
   float water_temp_;
   int fan_speed_;
-  float program_;
-  float season_;
+  int program_;
+  int season_;
   enum ReadWriteMode {
     read,
     write
   };
+  ReadWriteMode current_read_write_mode_ = { Innova::read };
   void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
     if (call.get_mode().has_value()) {
