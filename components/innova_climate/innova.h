@@ -26,7 +26,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   void update() override;
   void on_modbus_data(const std::vector<uint8_t> &data) override;
   void read_loop(const std::vector<uint8_t> &data);
-  void write_register(float new_value, uint16_t address);
+  void write_register(uint16_t function, float new_value, uint16_t address);
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
