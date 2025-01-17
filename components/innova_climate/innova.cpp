@@ -76,9 +76,9 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         case 5:
             this->season_ = (int)value;   
             //climate::ClimateMode smode;
-            if (this->season_ == 3) {
+            if ((this->season_ == 3) && (this->program_ & ~(1 << 7))) {
                 this->mode = climate::CLIMATE_MODE_HEAT;
-            } else if (this->season_ == 5) {
+            } else if ((this->season_ == 5) && (this->program_ & ~(1 << 7))) {
                 this->mode = climate::CLIMATE_MODE_COOL;
             } else if (this->program_ & (1<<7)) {
                 this->mode = climate::CLIMATE_MODE_OFF;
@@ -124,9 +124,6 @@ void Innova::loop() {
 
     if (this->waiting_ || (this->state_ == 0)) return;
 
-    this->last_send_ = now;
-    this->waiting_ = true;	
-    
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
         writeModbusRegister(this->writequeue_.front());
@@ -134,7 +131,9 @@ void Innova::loop() {
     } else {
         send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);        
     }
-
+    
+    this->last_send_ = now;
+    this->waiting_ = true;	
 }
 
 void Innova::update() {
