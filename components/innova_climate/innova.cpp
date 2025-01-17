@@ -28,25 +28,14 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
     this->waiting_ = false;
-  //  if (!waiting_for_write_ack_ && data.size() < 2) {
-//		  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
-//		return;
-//	}
+    if (data.size() < 2) {
+	  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
+      return;
+	}
     ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
-
-  	//  Command response is 4 bytes echoing the write command
- // 	if (waiting_for_write_ack_ )  {
- // 		waiting_for_write_ack_ = false ; 
-//	  	if (data.size() == 4) {
-//	  		ESP_LOGD(TAG, "Write command succeeded");
-//	  	} else {
-//	  		ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
-//	  	}
- // 		return ; 
- // 	}
-	
+    
     float value = (float) get_16bit(0);
-    int fan_value = (int) value & 0b111;
+    //int fan_value = (int) value & 0b111;
     switch (this->state_) {
       case 1:
         value /= 10.0;
@@ -74,7 +63,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         //ESP_LOGD(TAG, "Program=%.1f", value);
         this->program_ = value;   
     	climate::ClimateFanMode fmode;
-        switch (fan_value) {
+        switch ((int) value & 0b111) {
 	  case 0: fmode = climate::CLIMATE_FAN_AUTO; break;
           case 1: fmode = climate::CLIMATE_FAN_MEDIUM; break;
           case 2: fmode = climate::CLIMATE_FAN_LOW; break;
@@ -122,16 +111,19 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 
 void Innova::loop() {
     uint32_t now = millis();
+
     // timeout after 15 seconds
     if (this->waiting_ && (now - this->last_send_ > 15000)) {
       ESP_LOGW(TAG, "timed out waiting for response");
       this->waiting_ = false;
     }
-    if (this->waiting_ || (this->state_ == 0))
-      return;
+
+    if (this->waiting_ || (this->state_ == 0)) return;
+
     this->last_send_ = now;
+    this->waiting_ = true;	
+
     send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);
-    this->waiting_ = true;
 }
 
 void Innova::update() {
@@ -147,21 +139,21 @@ void Innova::control(const climate::ClimateCall &call) {
       climate::ClimateMode mode = *call.get_mode();
       switch (mode) {
 	      case climate::CLIMATE_MODE_OFF:
-                ESP_LOGD(TAG, "Set Climate Mode: OFF");
-		new_prg = curr_prg | (1 << 7);
-		write_register(new_prg, INNOVA_PROGRAM);
+            ESP_LOGD(TAG, "Set Climate Mode: OFF");
+	     	new_prg = curr_prg | (1 << 7);
+	    	write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      case climate::CLIMATE_MODE_HEAT:
 	        ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 	        write_register(3, INNOVA_SEASON);
-		new_prg = curr_prg & ~(1 << 7);  
-		//write_register(new_prg, INNOVA_PROGRAM);
+	    	new_prg = curr_prg & ~(1 << 7);  
+		    //write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      case climate::CLIMATE_MODE_COOL:
 	        ESP_LOGD(TAG, "Set Climate Mode:COOL");
 	        write_register(5, INNOVA_SEASON);
-		new_prg = curr_prg & ~(1 << 7);
-		//write_register(new_prg, INNOVA_PROGRAM);
+	    	new_prg = curr_prg & ~(1 << 7);
+		    //write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      default: 
 		      ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
