@@ -8,6 +8,11 @@
 
 namespace esphome {
 namespace innova {
+struct WriteableData
+{
+  uint16_t register_value;
+  uint16_t write_value;
+};
 
 class Innova : public esphome::climate::Climate, public PollingComponent, public modbus::ModbusDevice {
  public:
