@@ -30,7 +30,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
         return;
     }
-    //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+    ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
     read_loop(data);
 }
 
@@ -188,14 +188,17 @@ void Innova::write_register(float new_value, uint16_t address)
     writequeue_.emplace_back(data);
     ESP_LOGD(TAG, "Data write pending: value (%i), address (%i)", data.write_value, data.register_value);
     
-    uint16_t value_to_write = new_value;
-    uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
-    waiting_for_write_ack_= true;
-    send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
+    //uint16_t value_to_write = new_value;
+    //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
+    //waiting_for_write_ack_= true;
+    //send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
+    
+    uint8_t payload[] = {(uint8_t)(data.write_value >> 8), (uint8_t)data.write_value };
+    send(CMD_WRITE_REG,data.register_value,1,sizeof(payload),payload);
 }
 
 void Innova::dump_config() { 
-    LOG_CLIMATE("", "Innova Climate", this); 
+    //LOG_CLIMATE("", "Innova Climate", this); 
     ESP_LOGCONFIG(TAG, "INNOVA:");
     ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
 }
