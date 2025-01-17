@@ -118,7 +118,10 @@ void Innova::loop() {
 
     this->last_send_ = now;
     this->waiting_ = true;	
-
+    
+    if (this->writequeue_.size() > 0) {
+        ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
+    }
     send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);
 }
 
