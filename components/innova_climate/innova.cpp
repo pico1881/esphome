@@ -30,9 +30,8 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 	  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
       return;
 	}
-    ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+    //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
     read_loop(data);
-   
 }
 
 void Innova::read_loop(const std::vector<uint8_t> &data) {
