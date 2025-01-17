@@ -62,6 +62,9 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     write
   };
   ReadWriteMode current_read_write_mode_ = { Innova::read };
+  std::deque<WriteableData>writequeue_;
+  void writeModbusRegister(WriteableData write_data);
+
   void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
     if (call.get_mode().has_value()) {
