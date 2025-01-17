@@ -28,22 +28,22 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 	
     this->waiting_ = false;
-    if (!waiting_for_write_ack_ && data.size() < 2) {
-		  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
-		return;
-	}
+  //  if (!waiting_for_write_ack_ && data.size() < 2) {
+//		  ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
+//		return;
+//	}
     ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 
   	//  Command response is 4 bytes echoing the write command
-  	if (waiting_for_write_ack_ )  {
-  		waiting_for_write_ack_ = false ; 
-	  	if (data.size() == 4) {
-	  		ESP_LOGD(TAG, "Write command succeeded");
-	  	} else {
-	  		ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
-	  	}
-  		return ; 
-  	}
+ // 	if (waiting_for_write_ack_ )  {
+ // 		waiting_for_write_ack_ = false ; 
+//	  	if (data.size() == 4) {
+//	  		ESP_LOGD(TAG, "Write command succeeded");
+//	  	} else {
+//	  		ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
+//	  	}
+ // 		return ; 
+ // 	}
 	
     float value = (float) get_16bit(0);
     int fan_value = (int) value & 0b111;
@@ -95,6 +95,15 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
           default: smode = climate::CLIMATE_MODE_HEAT; break;
         }
         this->mode = smode; 
+	if (this->season_ == 3.0 && this->fan_speed_ > 0.0){
+	  this->action = climate::CLIMATE_ACTION_HEATING;
+        } else if (this->season_ == 5.0 && this->fan_speed_ > 0.0){
+	  this->action = climate::CLIMATE_ACTION_COOLING;
+        } else if ((int)this->program_ & (1<<7)){
+          this->action = climate::CLIMATE_ACTION_OFF;	
+        } else {
+          this->action = climate::CLIMATE_ACTION_IDLE;  
+        }
         ESP_LOGD(TAG, "Season=%.1f", this->season_);
         this->publish_state();
       break;
@@ -108,16 +117,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     }
     if (++this->state_ > 6)
       this->state_ = 0;
-	
-    if (this->season_ == 3.0 && this->fan_speed_ > 0.0){
-	this->action = climate::CLIMATE_ACTION_HEATING;
-    } else if (this->season_ == 5.0 && this->fan_speed_ > 0.0){
-	this->action = climate::CLIMATE_ACTION_COOLING;
-    } else if ((int)this->program_ & (1<<7)){
-	this->action = climate::CLIMATE_ACTION_OFF;	
-    } else {
-        this->action = climate::CLIMATE_ACTION_IDLE;  
-    }
+
 }
 
 void Innova::loop() {
