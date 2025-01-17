@@ -136,19 +136,19 @@ void Innova::control(const climate::ClimateCall &call) {
             case climate::CLIMATE_MODE_OFF:
                 ESP_LOGD(TAG, "Set Climate Mode: OFF");
                 new_prg = curr_prg | (1 << 7);
-                write_register(new_prg, INNOVA_PROGRAM);
+                write_register(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             case climate::CLIMATE_MODE_HEAT:
                 ESP_LOGD(TAG, "Set Climate Mode: HEAT");
-                write_register(3, INNOVA_SEASON);
+                write_register(CMD_WRITE_REG,3, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);  
-                //write_register(new_prg, INNOVA_PROGRAM);
+                //write_register(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             case climate::CLIMATE_MODE_COOL:
                 ESP_LOGD(TAG, "Set Climate Mode:COOL");
-                write_register(5, INNOVA_SEASON);
+                write_register(CMD_WRITE_REG,5, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);
-                //write_register(new_prg, INNOVA_PROGRAM);
+                //write_register(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             default: 
                 ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
@@ -167,7 +167,7 @@ void Innova::control(const climate::ClimateCall &call) {
             default: mode = 2; break;
         }
         ESP_LOGD(TAG, "Fan mode set to: %i", mode);
-        write_register(mode, INNOVA_PROGRAM);
+        write_register(CMD_WRITE_REG,mode, INNOVA_PROGRAM);
     }
     
     if (call.get_target_temperature().has_value()) {
@@ -175,26 +175,27 @@ void Innova::control(const climate::ClimateCall &call) {
         this->target_temperature = *call.get_target_temperature();
         float target = *call.get_target_temperature() * 10.0;
         ESP_LOGD(TAG, "Set Target=%.1f", target);
-        write_register(target, INNOVA_SETPOINT);
+        write_register(CMD_WRITE_REG,target, INNOVA_SETPOINT);
     }
     this->publish_state();
 }
 
-void Innova::write_register(float new_value, uint16_t address)
+void Innova::write_register(uint8_t function, float new_value, uint16_t address)
 {
     WriteableData data;
-    data.write_value    = new_value;
+    data.function_value = function;
+    data.write_value = new_value;
     data.register_value = address;
     writequeue_.emplace_back(data);
-    ESP_LOGD(TAG, "Data write pending: value (%i), address (%i)", data.write_value, data.register_value);
+    ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
     
+    uint8_t payload[] = {(uint8_t)(data.write_value >> 8), (uint8_t)data.write_value };
+    send( data.function_value,data.register_value,1,sizeof(payload),payload);
+
     //uint16_t value_to_write = new_value;
     //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
     //waiting_for_write_ack_= true;
     //send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
-    
-    uint8_t payload[] = {(uint8_t)(data.write_value >> 8), (uint8_t)data.write_value };
-    send(CMD_WRITE_REG,data.register_value,1,sizeof(payload),payload);
 }
 
 void Innova::dump_config() { 
