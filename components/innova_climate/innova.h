@@ -5,6 +5,7 @@
 #include "esphome/components/modbus/modbus.h"
 #include "esphome/components/climate/climate.h"
 #include "esphome/core/helpers.h"
+#include <deque>
 
 namespace esphome {
 namespace innova {
