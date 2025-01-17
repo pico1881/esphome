@@ -31,6 +31,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
       return;
 	}
     ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+    read_loop(data);
    
 }
 
