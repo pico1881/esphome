@@ -79,7 +79,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         switch ((int)value) {
 	  case 3: smode = climate::CLIMATE_MODE_HEAT; break;
           case 5: smode = climate::CLIMATE_MODE_COOL; break;
-          default: smode = climate::CLIMATE_MODE_HEAT; break;
+          default: smode = climate::CLIMATE_MODE_OFF; break;
         }
         this->mode = smode; 
 	if (this->season_ == 3 && this->fan_speed_ > 0){
