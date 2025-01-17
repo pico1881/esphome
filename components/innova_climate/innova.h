@@ -5,7 +5,7 @@
 #include "esphome/components/modbus/modbus.h"
 #include "esphome/components/climate/climate.h"
 #include "esphome/core/helpers.h"
-#include <queue>
+#include <deque>
 
 namespace esphome {
 namespace innova {
@@ -68,7 +68,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     write
   };
   ReadWriteMode current_read_write_mode_ = { Innova::read };
-  std::queue<WriteableData>writequeue_;
+  std::deque<WriteableData>writequeue_;
   void writeModbusRegister(WriteableData write_data);
 
   void control(const climate::ClimateCall &call) override; /*{
