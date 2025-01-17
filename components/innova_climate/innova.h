@@ -57,7 +57,10 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   float fan_speed_;
   float program_;
   float season_;
-
+  enum ReadWriteMode {
+    read,
+    write
+  };
   void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
     if (call.get_mode().has_value()) {
