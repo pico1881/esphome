@@ -54,7 +54,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   float current_temp_{10.0};
   float target_temp_{10.0};
   float water_temp_;
-  float fan_speed_;
+  int fan_speed_;
   float program_;
   float season_;
   enum ReadWriteMode {
