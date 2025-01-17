@@ -168,13 +168,13 @@ void Innova::control(const climate::ClimateCall &call) {
                 ESP_LOGD(TAG, "Set Climate Mode: HEAT");
                 add_to_queue(CMD_WRITE_REG,3, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);  
-                //add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
+                add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             case climate::CLIMATE_MODE_COOL:
                 ESP_LOGD(TAG, "Set Climate Mode:COOL");
                 add_to_queue(CMD_WRITE_REG,5, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);
-                //add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
+                add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             default: 
                 ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
