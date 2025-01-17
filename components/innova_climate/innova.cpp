@@ -186,6 +186,12 @@ void Innova::write_register(float new_value, uint16_t address)
     uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
     waiting_for_write_ack_= true;
     send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
+    
+    WriteableData data;
+    data.write_value    = new_value;
+    data.register_value = address;
+    writequeue_.emplace_back(data);
+    ESP_LOGD(TAG, "Data write pending.... (%i)", data.write_value);
 }
 
 void Innova::dump_config() { 
