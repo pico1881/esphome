@@ -53,17 +53,23 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         //ESP_LOGD(TAG, "Current temperature=%.1f", value);
         this->current_temp_ = value;
         this->current_temperature = value;
-        break;
+        ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
+        this->publish_state();
+      break;
       case 2:
         value /= 10.0;
         //ESP_LOGD(TAG, "Target temperature=%.1f", value);
         this->target_temp_ = value;
-        this->target_temperature = value;     
-        break;
+        this->target_temperature = value;    
+        ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
+        this->publish_state();
+      break;
       case 3:
         //ESP_LOGD(TAG, "Fan speed=%.1f", value);
         this->fan_speed_ = value;   
-        break;
+        ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
+        this->publish_state();
+      break;
       case 4:
         //ESP_LOGD(TAG, "Program=%.1f", value);
         this->program_ = value;   
@@ -75,7 +81,9 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
           case 3: fmode = climate::CLIMATE_FAN_HIGH; break;
           default: fmode = climate::CLIMATE_FAN_OFF; break;
         }
-        this->fan_mode = fmode;     
+        this->fan_mode = fmode;    
+        ESP_LOGD(TAG, "Program=%.1f", this->program_);
+        this->publish_state();
        break;
       case 5:
         //ESP_LOGD(TAG, "Season=%.1f", value);
@@ -87,11 +95,15 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
           default: smode = climate::CLIMATE_MODE_HEAT; break;
         }
         this->mode = smode; 
+        ESP_LOGD(TAG, "Season=%.1f", this->season_);
+        this->publish_state();
       break;
       case 6:
         value /= 10.0;
         //ESP_LOGD(TAG, "Water temperature=%.1f", value);
         this->water_temp_ = value;   
+        ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
+        this->publish_state();
       break;
     }
     if (++this->state_ > 6)
@@ -106,14 +118,6 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     } else {
         this->action = climate::CLIMATE_ACTION_IDLE;  
     }
-	    
-    ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
-    ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
-    ESP_LOGD(TAG, "Fan speed=%.1f", this->fan_speed_);
-    ESP_LOGD(TAG, "Program=%.1f", this->program_);
-    ESP_LOGD(TAG, "Season=%.1f", this->season_);
-    ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
-    this->publish_state();
 }
 
 void Innova::loop() {
@@ -151,13 +155,13 @@ void Innova::control(const climate::ClimateCall &call) {
 	        ESP_LOGD(TAG, "Set Climate Mode: HEAT");
 	        write_register(3, INNOVA_SEASON);
 		new_prg = curr_prg & ~(1 << 7);  
-		write_register(new_prg, INNOVA_PROGRAM);
+		//write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      case climate::CLIMATE_MODE_COOL:
 	        ESP_LOGD(TAG, "Set Climate Mode:COOL");
 	        write_register(5, INNOVA_SEASON);
 		new_prg = curr_prg & ~(1 << 7);
-		write_register(new_prg, INNOVA_PROGRAM);
+		//write_register(new_prg, INNOVA_PROGRAM);
 	      break;
 	      default: 
 		      ESP_LOGW(TAG, "Unsupported mode: %d", mode); 
