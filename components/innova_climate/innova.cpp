@@ -121,12 +121,35 @@ void Innova::loop() {
     
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
+        writeModbusRegister(this->writequeue_.front());
+        this->writequeue_.pop_front();
+    } else {
+        send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);        
     }
-    send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);
+
 }
 
 void Innova::update() {
     this->state_ = 1;
+}
+
+void Innova::add_to_queue(uint8_t function, float new_value, uint16_t address) {
+    WriteableData data;
+    data.function_value = function;
+    data.write_value = new_value;
+    data.register_value = address;
+    writequeue_.emplace_back(data);
+    ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
+}
+
+void Innova::writeModbusRegister(WriteableData write_data) {
+    uint8_t payload[] = {(uint8_t)(data.write_value >> 8), (uint8_t)data.write_value };
+    send( data.function_value,data.register_value,1,sizeof(payload),payload);
+
+    //uint16_t value_to_write = new_value;
+    //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
+    //waiting_for_write_ack_= true;
+    //send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
 }
 
 void Innova::control(const climate::ClimateCall &call) {
@@ -183,23 +206,6 @@ void Innova::control(const climate::ClimateCall &call) {
     this->publish_state();
 }
 
-void Innova::write_register(uint8_t function, float new_value, uint16_t address)
-{
-    WriteableData data;
-    data.function_value = function;
-    data.write_value = new_value;
-    data.register_value = address;
-    writequeue_.emplace_back(data);
-    ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
-    
-    uint8_t payload[] = {(uint8_t)(data.write_value >> 8), (uint8_t)data.write_value };
-    send( data.function_value,data.register_value,1,sizeof(payload),payload);
-
-    //uint16_t value_to_write = new_value;
-    //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
-    //waiting_for_write_ack_= true;
-    //send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
-}
 
 void Innova::dump_config() { 
     //LOG_CLIMATE("", "Innova Climate", this); 
