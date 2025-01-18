@@ -127,7 +127,7 @@ void Innova::loop() {
         this->waiting_ = false;
     }
 
-    if (this->waiting_ || (this->state_ == 0)) return;
+    if (this->waiting_ || (this->state_ == 0) || (now - this->last_send_ < 1000)) return;
 
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
@@ -158,14 +158,6 @@ void Innova::writeModbusRegister(WriteableData write_data) {
     uint8_t payload[] = {(uint8_t)(write_data.write_value >> 8), (uint8_t)write_data.write_value };
     send( write_data.function_value,write_data.register_value,1,sizeof(payload),payload);
     this->waiting_for_write_ack_ = true ; 
-	//this->waiting_ = false;
-//	this->state_ = 1;
-   Innova::update();
-
-    //uint16_t value_to_write = new_value;
-    //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
-    //waiting_for_write_ack_= true;
-    //send(CMD_WRITE_REG,address,1,sizeof(payload),payload);
 }
 
 void Innova::control(const climate::ClimateCall &call) {
