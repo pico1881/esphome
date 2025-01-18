@@ -128,7 +128,7 @@ void Innova::loop() {
     uint32_t now = millis();
 
     // timeout after 15 seconds
-    if (this->waiting_ && (now - this->last_send_ > 15000)) {
+    if (this->waiting_ && (now - this->last_send_ > 5000)) {
         ESP_LOGW(TAG, "timed out waiting for response");
         this->waiting_ = false;
     }
