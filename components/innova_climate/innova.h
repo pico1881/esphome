@@ -3,11 +3,18 @@
 #pragma once
 
 #include "esphome/components/modbus/modbus.h"
-#include "esphome/core/component.h"
 #include "esphome/components/climate/climate.h"
+#include "esphome/core/helpers.h"
+#include <deque>
 
 namespace esphome {
 namespace innova {
+struct WriteableData
+{
+  uint8_t function_value;
+  uint16_t register_value;
+  uint16_t write_value;
+};
 
 class Innova : public esphome::climate::Climate, public PollingComponent, public modbus::ModbusDevice {
  public:
@@ -18,7 +25,8 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   void dump_config() override;
   void update() override;
   void on_modbus_data(const std::vector<uint8_t> &data) override;
-  void write_register(float new_value, uint16_t address);
+  void read_loop(const std::vector<uint8_t> &data);
+  void add_to_queue(uint8_t function, float new_value, uint16_t address);
 
   climate::ClimateTraits traits() override {
     // Return the traits of this climate device.
@@ -53,9 +61,16 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   float current_temp_{10.0};
   float target_temp_{10.0};
   float water_temp_;
-  float fan_speed_;
-  float program_;
-  float season_;
+  int fan_speed_;
+  int program_;
+  int season_;
+  enum ReadWriteMode {
+    read,
+    write
+  };
+  ReadWriteMode current_read_write_mode_ = { Innova::read };
+  std::deque<WriteableData>writequeue_;
+  void writeModbusRegister(WriteableData write_data);
 
   void control(const climate::ClimateCall &call) override; /*{
     // Handle climate control actions
