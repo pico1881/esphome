@@ -159,9 +159,10 @@ void Innova::add_to_queue(uint8_t function, float new_value, uint16_t address) {
 
 void Innova::writeModbusRegister(WriteableData write_data) {
     this->state_ = 1;
+    this->waiting_for_write_ack_ = true ; 
     uint8_t payload[] = {(uint8_t)(write_data.write_value >> 8), (uint8_t)write_data.write_value };
     send( write_data.function_value,write_data.register_value,1,sizeof(payload),payload);
-    this->waiting_for_write_ack_ = true ; 
+    
 }
 
 void Innova::control(const climate::ClimateCall &call) {
