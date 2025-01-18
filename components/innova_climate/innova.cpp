@@ -193,22 +193,22 @@ void Innova::control(const climate::ClimateCall &call) {
         int curr_prg = this->program_;
         int new_prg = curr_prg;
         this->fan_mode = *call.get_fan_mode();
-        climate::ClimateFanMode fanmmode = *call.get_fan_mode();
+        climate::ClimateFanMode fan_mode = *call.get_fan_mode();
         switch (fanmode) {
             case climate::CLIMATE_FAN_LOW:
-                new_prg = curr_prg & ~(0b111) | 2; 
+                new_prg = (curr_prg & ~(0b111)) | 2; 
             break;
             case climate::CLIMATE_FAN_MEDIUM: 
-                new_prg = curr_prg & ~(0b111) | 1; 
+                new_prg = (curr_prg & ~(0b111)) | 1; 
             break;
             case climate::CLIMATE_FAN_HIGH:
-                new_prg = curr_prg & ~(0b111) | 3;
+                new_prg = (curr_prg & ~(0b111)) | 3;
             break;
             case climate::CLIMATE_FAN_AUTO: 
-                new_prg = curr_prg & ~(0b111); 
+                new_prg = (curr_prg & ~(0b111)); 
             break;
             default: 
-                new_prg = curr_prg & ~(0b111) | 1;
+                new_prg = (curr_prg & ~(0b111)) | 1;
             break;
         }
         ESP_LOGD(TAG, "Fan mode set to: %i", new_prg);
