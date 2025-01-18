@@ -159,6 +159,7 @@ void Innova::writeModbusRegister(WriteableData write_data) {
     send( write_data.function_value,write_data.register_value,1,sizeof(payload),payload);
     this->waiting_for_write_ack_ = true ; 
 	this->waiting_ = false;
+	this->state_ = 1;
 
     //uint16_t value_to_write = new_value;
     //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
