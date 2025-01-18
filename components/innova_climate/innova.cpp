@@ -26,11 +26,22 @@ void Innova::setup() {
 
 void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     this->waiting_ = false;
-    if (data.size() < 2) {
+    if (!waiting_for_write_ack_ && data.size() < 2) {
         ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
         return;
     }
     ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+	//  Command response is 4 bytes echoing the write command
+	if (waiting_for_write_ack_ )  {
+		waiting_for_write_ack_ = false ; 
+		if (data.size() == 4) {
+			ESP_LOGD(TAG, "Write command succeeded");
+		} else {
+			ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
+		}
+		return ; 
+    }
+    
     read_loop(data);
 }
 
@@ -152,6 +163,7 @@ void Innova::add_to_queue(uint8_t function, float new_value, uint16_t address) {
 void Innova::writeModbusRegister(WriteableData write_data) {
     uint8_t payload[] = {(uint8_t)(write_data.write_value >> 8), (uint8_t)write_data.write_value };
     send( write_data.function_value,write_data.register_value,1,sizeof(payload),payload);
+    this->waiting_for_write_ack_ = true ; 
 
     //uint16_t value_to_write = new_value;
     //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
