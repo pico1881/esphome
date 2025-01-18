@@ -30,7 +30,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         ESP_LOGW(TAG, "Invalid data packet size (%d) for state %d", data.size(), this->state_);
         return;
     }
-    ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
+    //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
 	//  Command response is 4 bytes echoing the write command
 	if (waiting_for_write_ack_ )  {
 		waiting_for_write_ack_ = false ; 
@@ -131,7 +131,7 @@ void Innova::loop() {
 	
     if (this->waiting_ || (this->state_ == 0)) return;
 
-    ESP_LOGD(TAG, "State=%d", this->state_);
+    //ESP_LOGD(TAG, "State=%d", this->state_);
 
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
@@ -231,7 +231,7 @@ void Innova::control(const climate::ClimateCall &call) {
     }
     this->publish_state();
     this->state_ = 1;
-    loop();
+    //loop();
 }
 
 
