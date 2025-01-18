@@ -174,6 +174,7 @@ void Innova::control(const climate::ClimateCall &call) {
                 ESP_LOGD(TAG, "Set Climate Mode: OFF");
                 new_prg = curr_prg | (1 << 7);
                 add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
+		
             break;
             case climate::CLIMATE_MODE_HEAT:
                 ESP_LOGD(TAG, "Set Climate Mode: HEAT");
@@ -225,6 +226,7 @@ void Innova::control(const climate::ClimateCall &call) {
         float target = *call.get_target_temperature() * 10.0;
         ESP_LOGD(TAG, "Set Target=%.1f", target);
         add_to_queue(CMD_WRITE_REG,target, INNOVA_SETPOINT);
+	    loop();
     }
     this->publish_state();
 }
