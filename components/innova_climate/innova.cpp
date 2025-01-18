@@ -127,7 +127,7 @@ void Innova::loop() {
         this->waiting_ = false;
     }
 
-    if (this->waiting_ || (this->state_ == 0) || (now - this->last_send_ < 1000)) return;
+    if (this->waiting_ || (this->state_ == 0) || (now - this->last_send_ < 3000)) return;
 
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
