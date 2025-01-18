@@ -114,9 +114,10 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             //this->publish_state();
         break;
     }
-    if (++this->state_ > 6)
+    if (++this->state_ > 6){
         this->state_ = 0;
-    //this->publish_state();
+    	this->publish_state();
+    }
 }
 void Innova::loop() {
     uint32_t now = millis();
@@ -142,8 +143,6 @@ void Innova::loop() {
     
     this->last_send_ = now;
     this->waiting_ = true;	
-
-	this->publish_state();
 }
 
 void Innova::update() {
