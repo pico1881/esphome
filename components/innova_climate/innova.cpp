@@ -16,12 +16,12 @@ static const uint16_t INNOVA_SETPOINT = 0xE7;           // reg 231
 static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_SETPOINT, INNOVA_FAN_SPEED, INNOVA_PROGRAM, INNOVA_SEASON, INNOVA_WATER_TEMPERATURE};
 
 void Innova::setup() {
-    this->current_temperature = 20.0;
-    this->target_temperature = 21.0;
+    //this->current_temperature = 20.0;
+    //this->target_temperature = 21.0;
     //this->mode = climate::CLIMATE_MODE_HEAT;
     //this->action = climate::CLIMATE_ACTION_HEATING;
     //this->fan_mode = climate::CLIMATE_FAN_LOW;
-    this->publish_state();
+    //this->publish_state();
 }
 
 void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
@@ -95,12 +95,6 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
                 this->mode = climate::CLIMATE_MODE_OFF;
             }
             
-            //switch ((int)value) {
-            //    case 3: smode =  climate::CLIMATE_MODE_HEAT break;
-            //    case 5: smode = climate::CLIMATE_MODE_COOL; break;
-            //    default: smode = climate::CLIMATE_MODE_OFF; break;
-            //}
-            //this->mode = smode; 
             if (this->season_ == 3 && this->fan_speed_ > 0) {
                 this->action = climate::CLIMATE_ACTION_HEATING;
             } else if (this->season_ == 5 && this->fan_speed_ > 0) {
@@ -128,8 +122,8 @@ void Innova::loop() {
     uint32_t now = millis();
 
     // timeout after 15 seconds
-    if (this->waiting_ && (now - this->last_send_ > 5000)) {
-        ESP_LOGW(TAG, "timed out waiting for response");
+    if (this->waiting_ && (now - this->last_send_ > 15000)) {
+        ESP_LOGW(TAG, "Timed out waiting for response");
         this->waiting_ = false;
     }
 
@@ -164,7 +158,6 @@ void Innova::writeModbusRegister(WriteableData write_data) {
     uint8_t payload[] = {(uint8_t)(write_data.write_value >> 8), (uint8_t)write_data.write_value };
     send( write_data.function_value,write_data.register_value,1,sizeof(payload),payload);
     this->waiting_for_write_ack_ = true ; 
-    this->state_ = 1;
 
     //uint16_t value_to_write = new_value;
     //uint8_t payload[] = {(uint8_t)(value_to_write >> 8), (uint8_t)value_to_write };
