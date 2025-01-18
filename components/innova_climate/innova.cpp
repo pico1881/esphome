@@ -56,19 +56,19 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             this->current_temp_ = value;
             this->current_temperature = value;
             ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
-            this->publish_state();
+            //this->publish_state();
         break;
         case 2:
             value /= 10.0;
             this->target_temp_ = value;
             this->target_temperature = value;    
             ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
-            this->publish_state();
+            //this->publish_state();
         break;
         case 3:
             this->fan_speed_ = (int)value;   
             ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
-            this->publish_state();
+            //this->publish_state();
         break;
         case 4:
             this->program_ = (int)value;   
@@ -82,7 +82,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             }
             this->fan_mode = fmode;    
             ESP_LOGD(TAG, "Program=%d", this->program_);
-            this->publish_state();
+            //this->publish_state();
         break;
         case 5:
             this->season_ = (int)value;   
@@ -105,18 +105,18 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
                 this->action = climate::CLIMATE_ACTION_IDLE;  
             }
             ESP_LOGD(TAG, "Season=%d", this->season_);
-            this->publish_state();
+            //this->publish_state();
         break;
         case 6:
             value /= 10.0;
             this->water_temp_ = value;   
             ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
-            this->publish_state();
+            //this->publish_state();
         break;
     }
     if (++this->state_ > 6)
         this->state_ = 0;
-
+    this->publish_state();
 }
 void Innova::loop() {
     uint32_t now = millis();
@@ -127,7 +127,7 @@ void Innova::loop() {
         this->waiting_ = false;
     }
 
-    if (this->waiting_ || (this->state_ == 0) || (now - this->last_send_ < 3000)) return;
+    if (this->waiting_ || (this->state_ == 0)) return;
 
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
