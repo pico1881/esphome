@@ -76,11 +76,11 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         case 5:
             this->season_ = (int)value;   
             //climate::ClimateMode smode;
-            if ((this->season_ == 3) && (this->program_ & ~(1 << 7))) {
+            if (this->season_ == 3 && !((this->program_ & (0x0080)) == 128)) {
                 this->mode = climate::CLIMATE_MODE_HEAT;
-            } else if ((this->season_ == 5) && (this->program_ & ~(1 << 7))) {
+            } else if (this->season_ == 5 && !((this->program_ & (0x0080)) == 128)) {
                 this->mode = climate::CLIMATE_MODE_COOL;
-            } else if (this->program_ & (1<<7)) {
+            } else {
                 this->mode = climate::CLIMATE_MODE_OFF;
             }
             
@@ -94,7 +94,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
                 this->action = climate::CLIMATE_ACTION_HEATING;
             } else if (this->season_ == 5 && this->fan_speed_ > 0) {
                  this->action = climate::CLIMATE_ACTION_COOLING;
-            } else if (this->program_ & (1<<7)) {
+            } else if ((this->program_ & (0x0080)) == 128) {
                 this->action = climate::CLIMATE_ACTION_OFF;	
             } else {
                 this->action = climate::CLIMATE_ACTION_IDLE;  
