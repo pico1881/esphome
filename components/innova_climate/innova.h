@@ -66,7 +66,8 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   int season_;
   enum ReadWriteMode {
     read,
-    write
+    write,
+    idle
   };
   ReadWriteMode current_read_write_mode_ = { Innova::read };
   std::deque<WriteableData>writequeue_;
