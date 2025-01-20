@@ -66,12 +66,12 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             //this->publish_state();
         break;
         case 3:
-            this->fan_speed_ = (int)value;   
+            this->fan_speed_ = value;   
             ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
             //this->publish_state();
         break;
         case 4:
-            this->program_ = (int)value;   
+            this->program_ = value;   
             climate::ClimateFanMode fmode;
             switch ((int) value & 0b111) {
                 case 0: fmode = climate::CLIMATE_FAN_AUTO; break;
@@ -85,7 +85,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             //this->publish_state();
         break;
         case 5:
-            this->season_ = (int)value;   
+            this->season_ = value;   
             //climate::ClimateMode smode;
             if (this->season_ == 3 && !((this->program_ & (0x0080)) == 128)) {
                 this->mode = climate::CLIMATE_MODE_HEAT;
