@@ -48,7 +48,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 void Innova::read_loop(const std::vector<uint8_t> &data) {
     auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 
-    float value = (float) get_16bit(0);
+    int value = get_16bit(0);
 
     switch (this->state_) {
         case 1:
