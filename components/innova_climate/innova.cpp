@@ -115,7 +115,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         break;
     }
     if (++this->state_ > 6){
-        this->state_ = 0;
+        this->write_data_ = true;
     	this->publish_state();
     }
 }
@@ -129,7 +129,7 @@ void Innova::loop() {
     }
 
 	
-    if (this->waiting_ || (this->state_ == 0)) return;
+    if (this->waiting_ || (this->state_ == 0) || (this->write_data_ == false)) return;
 
     //ESP_LOGD(TAG, "State=%d", this->state_);
 
@@ -138,6 +138,7 @@ void Innova::loop() {
         writeModbusRegister(this->writequeue_.front());
         this->writequeue_.pop_front();
     } else {
+	this->write_data_ = false;
         send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);        
     }
     
