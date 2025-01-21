@@ -115,7 +115,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
         break;
     }
     if (++this->state_ > 6){
-        this->write_data_ = true;
+        this->state_ = 0;
     	this->publish_state();
     }
 }
