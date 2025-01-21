@@ -129,7 +129,7 @@ void Innova::loop() {
     }
 
 	
-    if (this->waiting_ || (this->state_ == 0) || (this->write_data_ == false)) return;
+    if (this->waiting_ || (this->state_ == 0) ) return;
 
     //ESP_LOGD(TAG, "State=%d", this->state_);
 
