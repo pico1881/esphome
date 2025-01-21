@@ -138,7 +138,6 @@ void Innova::loop() {
         writeModbusRegister(this->writequeue_.front());
         this->writequeue_.pop_front();
     } else {
-	this->write_data_ = false;
         send(CMD_READ_REG, REGISTER[this->state_ - 1], 1);        
     }
     
@@ -231,8 +230,8 @@ void Innova::control(const climate::ClimateCall &call) {
 
     }
     this->publish_state();
-    this->write_data_ = true;
-    //this->state_ = 1;
+    //this->write_data_ = true;
+    this->state_ = 1;
     //loop();
 }
 
