@@ -231,7 +231,8 @@ void Innova::control(const climate::ClimateCall &call) {
 
     }
     this->publish_state();
-    this->state_ = 1;
+    this->write_data_ = true;
+    //this->state_ = 1;
     //loop();
 }
 
