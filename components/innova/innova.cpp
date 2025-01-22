@@ -55,7 +55,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 	        if (this->air_temperature_sensor_ != nullptr)
                this->air_temperature_sensor_->publish_state(f_value);
 	        current_temp_callback_.call(current_temp_);
-            ESP_LOGD(TAG, "Current temperature=%.1f", this->current_temp_);
+            //ESP_LOGD(TAG, "Current temperature=%.1f", this->current_temp_);
         break;
         case 2:
             f_value /= 10.0;
@@ -63,13 +63,13 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
             if (this->setpoint_sensor_ != nullptr)
                  this->setpoint_sensor_->publish_state(f_value);
  	        target_temp_callback_.call(target_temp_);
-            ESP_LOGD(TAG, "Target temperature=%.1f", this->target_temp_);
+            //ESP_LOGD(TAG, "Target temperature=%.1f", this->target_temp_);
         break;
         case 3:
             this->fan_speed_ = value;   
             if (this->fan_speed_sensor_ != nullptr)
                 this->fan_speed_sensor_->publish_state(value);            
-            ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
+          //  ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
         break;
         case 4:
             this->program_ = value;     
@@ -83,7 +83,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 		key_lock_callback_.call(false);
 	    }
 		    
-	    ESP_LOGD(TAG, "Program=%d", this->program_);
+	   // ESP_LOGD(TAG, "Program=%d", this->program_);
         break;
         case 5:
             this->season_ = value;   
@@ -108,14 +108,14 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
                 climate_action_callback_.call(4);	//idle
             }
 	
-            ESP_LOGD(TAG, "Season=%d", this->season_);
+           // ESP_LOGD(TAG, "Season=%d", this->season_);
         break;
         case 6:
             f_value /= 10.0;
             this->water_temp_ = f_value;  
             if (this->water_temperature_sensor_ != nullptr)
                 this->water_temperature_sensor_->publish_state(f_value);
-            ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
+          //  ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
         break;
         case 7:
             this->out_reg_ = value;   
@@ -138,7 +138,7 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
 	            }
             }
 		
-            ESP_LOGD(TAG, "Output=%d", this->out_reg_);
+           // ESP_LOGD(TAG, "Output=%d", this->out_reg_);
         break;
     }
     if (++this->state_ > 7){
@@ -161,7 +161,7 @@ void Innova::loop() {
     //ESP_LOGD(TAG, "State=%d", this->state_);
 
     if (this->writequeue_.size() > 0) {
-        ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
+      //  ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
         writeModbusRegister(this->writequeue_.front());
         this->writequeue_.pop_front();
     } else {
@@ -183,7 +183,7 @@ void Innova::add_to_queue(uint8_t function, float new_value, uint16_t address) {
     data.write_value = new_value;
     data.register_value = address;
     writequeue_.emplace_back(data);
-    ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
+   // ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
 }
 
 void Innova::writeModbusRegister(WriteableData write_data) { 
