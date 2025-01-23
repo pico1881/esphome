@@ -12,6 +12,8 @@ from esphome.const import (
     UNIT_REVOLUTIONS_PER_MINUTE,
     UNIT_CELSIUS,
     UNIT_EMPTY,
+    ICON_FAN,
+
 )
 
 DEPENDENCIES = ['innova']
@@ -43,6 +45,7 @@ CONFIG_SCHEMA = {
                 accuracy_decimals=0,
                 device_class=DEVICE_CLASS_SPEED,
                 state_class=STATE_CLASS_MEASUREMENT,
+                icon=ICON_FAN,
             ),
             cv.Optional(CONF_PROGRAM): sensor.sensor_schema(
                 unit_of_measurement=UNIT_EMPTY,
