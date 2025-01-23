@@ -3,7 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import modbus
 from esphome.const import CONF_ID
 
-AUTO_LOAD = ['modbus', 'sensor']
+AUTO_LOAD = ['modbus', 'sensor', 'binary_sensor']
 
 innova_ns = cg.esphome_ns.namespace('innova')
 Innova = innova_ns.class_("Innova", cg.PollingComponent, modbus.ModbusDevice)
