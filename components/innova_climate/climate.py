@@ -14,14 +14,6 @@ innova_ns = cg.esphome_ns.namespace("innova")
 
 Innova = innova_ns.class_("Innova", climate.Climate, cg.PollingComponent, modbus.ModbusDevice)
 
-
-#CONFIG_SCHEMA = cv.Schema({
-#    cv.GenerateID(): cv.declare_id(InnovaClimate),
-#    cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(),
-#    cv.Optional(CONF_HUMIDITY): sensor.sensor_schema(),
-#}).extend(cv.polling_component_schema('60s')).extend(climate.CLIMATE_SCHEMA)
-
-
 CONFIG_SCHEMA = (
     climate.CLIMATE_SCHEMA.extend(
         {
@@ -37,13 +29,3 @@ async def to_code(config):
     await cg.register_component(var, config)
     await climate.register_climate(var, config)
     await modbus.register_modbus_device(var, config)
-
-    # Set up temperature sensor if defined
- #   if CONF_TEMPERATURE in config:
- #       sens = await sensor.new_sensor(config[CONF_TEMPERATURE])
- #       cg.add(var.set_temperature_sensor(sens))
-
-    # Set up humidity sensor if defined
-#    if CONF_HUMIDITY in config:
-#        sens = await sensor.new_sensor(config[CONF_HUMIDITY])
- #       cg.add(var.set_humidity_sensor(sens))
