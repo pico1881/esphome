@@ -55,20 +55,17 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             value /= 10.0;
             this->current_temp_ = value;
             this->current_temperature = value;
-            ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Air temperature=%.1f", this->current_temp_);
         break;
         case 2:
             value /= 10.0;
             this->target_temp_ = value;
             this->target_temperature = value;    
-            ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Setpoint temperature=%.1f", this->target_temp_);
         break;
         case 3:
             this->fan_speed_ = value;   
-            ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Fan speed=%d", this->fan_speed_);
         break;
         case 4:
             this->program_ = value;   
@@ -81,8 +78,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
                 default: fmode = climate::CLIMATE_FAN_MEDIUM; break;
             }
             this->fan_mode = fmode;    
-            ESP_LOGD(TAG, "Program=%d", this->program_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Program=%d", this->program_);
         break;
         case 5:
             this->season_ = value;   
@@ -104,14 +100,12 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
             } else {
                 this->action = climate::CLIMATE_ACTION_IDLE;  
             }
-            ESP_LOGD(TAG, "Season=%d", this->season_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Season=%d", this->season_);
         break;
         case 6:
             value /= 10.0;
             this->water_temp_ = value;   
-            ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
-            //this->publish_state();
+            //ESP_LOGD(TAG, "Water temperature=%.1f", this->water_temp_);
         break;
     }
     if (++this->state_ > 6){
@@ -127,11 +121,8 @@ void Innova::loop() {
         ESP_LOGW(TAG, "Timed out waiting for response");
         this->waiting_ = false;
     }
-
 	
     if (this->waiting_ || (this->state_ == 0) ) return;
-
-    //ESP_LOGD(TAG, "State=%d", this->state_);
 
     if (this->writequeue_.size() > 0) {
         ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
@@ -227,17 +218,14 @@ void Innova::control(const climate::ClimateCall &call) {
         float target = *call.get_target_temperature() * 10.0;
         ESP_LOGD(TAG, "Set Target=%.1f", target);
         add_to_queue(CMD_WRITE_REG,target, INNOVA_SETPOINT);
-
     }
     this->publish_state();
-    //this->write_data_ = true;
     this->state_ = 1;
-    //loop();
 }
 
 
 void Innova::dump_config() { 
-    //LOG_CLIMATE("", "Innova Climate", this); 
+    LOG_CLIMATE("", "Innova Climate", this); 
     ESP_LOGCONFIG(TAG, "INNOVA:");
     ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->address_);
 }
