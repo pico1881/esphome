@@ -15,14 +15,7 @@ static const uint16_t INNOVA_SEASON = 0xE9;             // reg 233
 static const uint16_t INNOVA_SETPOINT = 0xE7;           // reg 231
 static const uint16_t REGISTER[] = {INNOVA_AIR_TEMPERATURE, INNOVA_SETPOINT, INNOVA_FAN_SPEED, INNOVA_PROGRAM, INNOVA_SEASON, INNOVA_WATER_TEMPERATURE};
 
-void Innova::setup() {
-    //this->current_temperature = 20.0;
-    //this->target_temperature = 21.0;
-    //this->mode = climate::CLIMATE_MODE_HEAT;
-    //this->action = climate::CLIMATE_ACTION_HEATING;
-    //this->fan_mode = climate::CLIMATE_FAN_LOW;
-    //this->publish_state();
-}
+void Innova::setup() {}
 
 void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
     this->waiting_ = false;
@@ -31,21 +24,17 @@ void Innova::on_modbus_data(const std::vector<uint8_t> &data) {
         return;
     }
     //ESP_LOGD(TAG, "Data: %s", format_hex_pretty(data).c_str());
-	//  Command response is 4 bytes echoing the write command
-	if (waiting_for_write_ack_ )  {
-		waiting_for_write_ack_ = false ; 
-		if (data.size() == 4) {
-			ESP_LOGD(TAG, "Write command succeeded");
-		} else {
-			ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
-		}
-		return ; 
+    //  Command response is 4 bytes echoing the write command
+    if (waiting_for_write_ack_ )  {
+	waiting_for_write_ack_ = false ; 
+	if (data.size() == 4) {
+		ESP_LOGD(TAG, "Write command succeeded");
+	} else {
+		ESP_LOGW(TAG, "Invalid data packet size (%d) while waiting for write command response", data.size());
+	}
+	return ; 
     }
     
-    read_loop(data);
-}
-
-void Innova::read_loop(const std::vector<uint8_t> &data) {
     auto get_16bit = [&](int i) -> uint16_t { return (uint16_t(data[i * 2]) << 8) | uint16_t(data[i * 2 + 1]); };
 
     int value = get_16bit(0);
@@ -113,6 +102,7 @@ void Innova::read_loop(const std::vector<uint8_t> &data) {
     	this->publish_state();
     }
 }
+
 void Innova::loop() {
     uint32_t now = millis();
 
@@ -125,7 +115,7 @@ void Innova::loop() {
     if (this->waiting_ || (this->state_ == 0) ) return;
 
     if (this->writequeue_.size() > 0) {
-        ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
+        //ESP_LOGD(TAG, "Write mode: Write queue size is now: %d",this->writequeue_.size());
         writeModbusRegister(this->writequeue_.front());
         this->writequeue_.pop_front();
     } else {
@@ -146,7 +136,7 @@ void Innova::add_to_queue(uint8_t function, float new_value, uint16_t address) {
     data.write_value = new_value;
     data.register_value = address;
     writequeue_.emplace_back(data);
-    ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
+    //ESP_LOGD(TAG, "Data write pending: function (%i), value (%i), address (%i)", data.function_value, data.write_value, data.register_value);
 }
 
 void Innova::writeModbusRegister(WriteableData write_data) { 
@@ -163,19 +153,19 @@ void Innova::control(const climate::ClimateCall &call) {
         climate::ClimateMode mode = *call.get_mode();
         switch (mode) {
             case climate::CLIMATE_MODE_OFF:
-                ESP_LOGD(TAG, "Set Climate Mode: OFF");
+                //ESP_LOGD(TAG, "Set Climate Mode: OFF");
                 new_prg = curr_prg | (1 << 7);
                 add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
 		
             break;
             case climate::CLIMATE_MODE_HEAT:
-                ESP_LOGD(TAG, "Set Climate Mode: HEAT");
+                //ESP_LOGD(TAG, "Set Climate Mode: HEAT");
                 add_to_queue(CMD_WRITE_REG,3, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);  
                 add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
             break;
             case climate::CLIMATE_MODE_COOL:
-                ESP_LOGD(TAG, "Set Climate Mode:COOL");
+                //ESP_LOGD(TAG, "Set Climate Mode:COOL");
                 add_to_queue(CMD_WRITE_REG,5, INNOVA_SEASON);
                 new_prg = curr_prg & ~(1 << 7);
                 add_to_queue(CMD_WRITE_REG,new_prg, INNOVA_PROGRAM);
@@ -208,7 +198,7 @@ void Innova::control(const climate::ClimateCall &call) {
                 new_prg = (curr_prg & ~(0b111)) | 1;
             break;
         }
-        ESP_LOGD(TAG, "Fan mode set to: %i", new_prg);
+        //ESP_LOGD(TAG, "Fan mode set to: %i", new_prg);
         add_to_queue(CMD_WRITE_REG, new_prg, INNOVA_PROGRAM);
     }
     
@@ -216,7 +206,7 @@ void Innova::control(const climate::ClimateCall &call) {
         // User requested target temperature change
         this->target_temperature = *call.get_target_temperature();
         float target = *call.get_target_temperature() * 10.0;
-        ESP_LOGD(TAG, "Set Target=%.1f", target);
+        //ESP_LOGD(TAG, "Set Target=%.1f", target);
         add_to_queue(CMD_WRITE_REG,target, INNOVA_SETPOINT);
     }
     this->publish_state();
