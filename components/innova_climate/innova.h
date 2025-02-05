@@ -18,8 +18,6 @@ struct WriteableData
 
 class Innova : public esphome::climate::Climate, public PollingComponent, public modbus::ModbusDevice {
  public:
-  //Innova() : PollingComponent(15000) {}  // Poll every 15 seconds
-
   void setup() override;
   void loop() override;
   void dump_config() override;
@@ -51,8 +49,6 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
     return traits;
   }
 
-  
-
  protected:
   int state_{0};
   bool waiting_{false};
@@ -74,33 +70,7 @@ class Innova : public esphome::climate::Climate, public PollingComponent, public
   std::deque<WriteableData>writequeue_;
   void writeModbusRegister(WriteableData write_data);
 
-  void control(const climate::ClimateCall &call) override; /*{
-    // Handle climate control actions
-    if (call.get_mode().has_value()) {
-      // User requested mode change
-      this->mode = *call.get_mode();
-    }
-    if (call.get_target_temperature().has_value()) {
-      // User requested target temperature change
-      this->target_temperature = *call.get_target_temperature();
-    }
-
-    // Apply the changes (e.g., turn on/off relays)
-    apply_control();
-    this->publish_state();
-  }*/
-
-
- /*  void apply_control() {
-    // Implement logic to control the HVAC system based on the current mode and target temperature
-    if (this->mode == climate::CLIMATE_MODE_COOL) {
-      // Turn on cooling
-    } else if (this->mode == climate::CLIMATE_MODE_HEAT) {
-      // Turn on heating
-    } else {
-      // Turn off HVAC
-    }
-  }*/
+  void control(const climate::ClimateCall &call) override; 
 };
 
 }  // namespace innova
